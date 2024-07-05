@@ -48,11 +48,12 @@ if [ "$1" = "range" ]; then
             echo "Error: Failed to run simscript_thomas.py"
             exit 1
         fi
-	echo "Injected S/N = $output"
-	for width in $(seq $width_start $width_step $width_end); do
-	   for DM in $(seq $DM_start $DM_step $DM_end); do
-
+	for width1 in $(seq $width_start $width_step $width_end); do
+	   for DM1 in $(seq $DM_start $DM_step $DM_end); do
+		width=$(python ../custom_round.py $width1 1)
+		DM=$(python ../custom_round.py $DM1 0)
         	# Run the prepdata command
+		echo "$width,$width_start,$width_step" 
         	prepdata -nobary -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run prepdata"
@@ -78,6 +79,7 @@ if [ "$1" = "range" ]; then
 		#echo "$width,$width_start,$width_step"
 		dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
                 width_index=$( echo "($width - $width_start) / $width_step " | bc)
+		#echo "$width_index=$width_index,dm_index=$dm_index"
        		result=$(awk '
                     # Skip lines starting with a comment character (#)
                     $1 ~ /^#/ { next }
@@ -102,12 +104,9 @@ if [ "$1" = "range" ]; then
 	done
 	dm_index=$(echo " ($DM_end - $DM_start) / $DM_step " | bc)
 	width_index=$(echo " ($width_end - $width_start) / $width_step " | bc)
-	int_dm=$( printf "%.0f" $dm_index)
-	int_width=$( printf "%.0f" $width_index)
-	#echo "$int_dm,$int_width"
-	for i in $(seq 0 1 $int_dm); do
+	for i in $(seq 0 1 $dm_index); do
 		row=""
-        	for j in $(seq 0 1 $int_width); do
+        	for j in $(seq 0 1 $width_index); do
 			row+=" ${matrix[$j,$i]}" 
 		done
 		echo "$row" >> "$temp"
