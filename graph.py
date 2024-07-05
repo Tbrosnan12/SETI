@@ -18,12 +18,12 @@ Reported = read_file(sys.argv[2])
 Injected = read_file(sys.argv[1])
 
 # Read the DM and width range parameters from the command-line arguments
-DM_start = int(sys.argv[3])
-DM_end = int(sys.argv[4])
-DM_step = int(sys.argv[5])
-width_start = int(sys.argv[6])
-width_end = int(sys.argv[7])
-width_step = int(sys.argv[8])
+DM_start =float(sys.argv[3])
+DM_end = float(sys.argv[4])
+DM_step = float(sys.argv[5])
+width_start =float(sys.argv[6])
+width_end = float(sys.argv[7])
+width_step = float(sys.argv[8])
 
 # Calculate the number of intervals for DM and width
 DM_int = (DM_end - DM_start) / DM_step + 1

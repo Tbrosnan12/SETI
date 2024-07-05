@@ -45,7 +45,7 @@ if [ "$1" = "range" ]; then
         # Create the pulses
 	injected_sn= python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
         if [ $? -ne 0 ]; then
-            echo "Error: Failed to run simscript_2023_fractionalbandwidth.py"
+            echo "Error: Failed to run simscript_thomas.py"
             exit 1
         fi
 	echo "Injected S/N = $output"
@@ -53,20 +53,20 @@ if [ "$1" = "range" ]; then
 	   for DM in $(seq $DM_start $DM_step $DM_end); do
 
         	# Run the prepdata command
-        	prepdata -nobary -dm ${DM} -o test_single_dm${DM}.0_width${width}.0 test_single_dm${DM}.0_width${width}.0.fil | grep "Writing"
+        	prepdata -nobary -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run prepdata"
         	    exit 1
         	fi
         	# Run the single_pulse_search.py command
-        	single_pulse_search.py -b test_single_dm${DM}.0_width${width}.0.dat | grep "Found"
+        	single_pulse_search.py -b test_single_dm${DM}_width${width}.dat | grep "Found"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run single_pulse_search.py"
             	    exit 1
         	fi
 
 
-        	filename="test_single_dm${DM}.0_width${width}.0.singlepulse"
+        	filename="test_single_dm${DM}_width${width}.singlepulse"
 
         	# Check if the file exists
         	if [ ! -f "$filename" ]; then
@@ -75,8 +75,9 @@ if [ "$1" = "range" ]; then
         	fi
 
         	#extract the Sigma values from the file
-		dm_index=$(( ($DM - $DM_start) / $DM_step ))
-                width_index=$(( ($width - $width_start) / $width_step ))
+		#echo "$width,$width_start,$width_step"
+		dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
+                width_index=$( echo "($width - $width_start) / $width_step " | bc)
        		result=$(awk '
                     # Skip lines starting with a comment character (#)
                     $1 ~ /^#/ { next }
@@ -99,8 +100,8 @@ if [ "$1" = "range" ]; then
 		#echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
 	   done
 	done
-	dm_index=$(( ($DM_end - $DM_start) / $DM_step ))
-	width_index=$(( ($width_end - $width_start) / $width_step ))
+	dm_index=$(echo " ($DM_end - $DM_start) / $DM_step " | bc)
+	width_index=$(echo " ($width_end - $width_start) / $width_step " | bc)
 	int_dm=$( printf "%.0f" $dm_index)
 	int_width=$( printf "%.0f" $width_index)
 	#echo "$int_dm,$int_width"
@@ -124,20 +125,20 @@ else
 	amp=50
 
 	# Run the Python script
-	python simscript_2023_fractionalbandwidth.py --dm_start $DM --dm $DM --step 100 --sig_start $width --sig_step 1 --sig $width -N 1 -A $amp -s 5000
+	python simscript_thomas.py --dm_start $DM --dm $DM --step 100 --sig_start $width --sig_step 1 --sig $width -N 1 -A $amp -s 5000
 	if [ $? -ne 0 ]; then
-	    echo "Error: Failed to run simscript_2023_fractionalbandwidth.py"
+	    echo "Error: Failed to run simscript_thomas.py"
 	    exit 1
 	fi
 
 	# Run the prepdata command
-	prepdata -nobary -dm ${DM} -o test_single_dm${DM}.0_width${width}.0 test_single_dm${DM}.0_width${width}.0.fil | grep "Writing"
+	prepdata -nobary -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
 	if [ $? -ne 0 ]; then
 	    echo "Error: Failed to run prepdata"
 	    exit 1
 	fi
 	# Run the single_pulse_search.py command
-	single_pulse_search.py -b test_single_dm${DM}.0_width${width}.0.dat | grep "Found"
+	single_pulse_search.py -b test_single_dm${DM}_width${width}.dat | grep "Found"
 
 	if [ $? -ne 0 ]; then
 	    echo "Error: Failed to run single_pulse_search.py"
@@ -145,7 +146,7 @@ else
 	fi
 
 
-	filename="test_single_dm${DM}.0_width${width}.0.singlepulse"
+	filename="test_single_dm${DM}_width${width}.singlepulse"
 
 	# Check if the file exists
 	if [ ! -f "$filename" ]; then
