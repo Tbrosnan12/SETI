@@ -86,11 +86,11 @@ if [ "$1" = "range" ]; then
 
                     # Print the Second column (Sigma values)
                     { print $2; exit }
-                ' "$filename")
-                if [ $? -ne 0 ]; then
-                    echo "Error: Failed to extract Sigma values"
-                    exit 1
-                fi
+                    ' "$filename")
+            if [ $? -ne 0 ]; then
+                echo "Error: Failed to extract Sigma values"
+                exit 1
+            fi
 		    echo "Sigma = $result"
 			if [ -z "$result" ]; then
 			#echo "$dm_index,$width_index,$result"
