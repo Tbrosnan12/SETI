@@ -43,7 +43,7 @@ if [ "$1" = "range" ]; then
         amp=50
 
         # Create the pulses
-	injected_sn= python ../simscript_2023_fractionalbandwidth.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
+	injected_sn= python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
         if [ $? -ne 0 ]; then
             echo "Error: Failed to run simscript_2023_fractionalbandwidth.py"
             exit 1
