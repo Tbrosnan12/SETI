@@ -18,19 +18,19 @@ fi
 # if statment here to deside waither one pulse is created or a range of pulses
 if [ "$1" = "range" ]; then
         # Check if the correct number of arguments is provided
-        if [ "$#" -ne 7 ]; then
-        	echo "Error: Invalid number of arguments."
-        	usage
-        fi
+    if [ "$#" -ne 7 ]; then
+    	echo "Error: Invalid number of arguments."
+    	usage
+    fi
 
 	mkdir output_files
 	cd output_files
 	declare -A matrix
 	if [ $? -ne 0 ]; then
-            echo "Error: This script will only run using 'bash $0' as sh shell does not have declare -A matrix for some reason "
-            exit 1
-        fi
-        touch temp1.txt
+        echo "Error: This script will only run using 'bash $0' as sh shell does not have declare -A matrix for some reason "
+        exit 1
+    fi
+    touch temp1.txt
 	touch temp2.txt
 	temp="temp2.txt"
 
@@ -40,20 +40,20 @@ if [ "$1" = "range" ]; then
     width_start=$5
 	width_end=$6
 	width_step=$7
-        amp=50
+    amp=50
 
         # Create the pulses
-	injected_sn= python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
-        if [ $? -ne 0 ]; then
-            echo "Error: Failed to run simscript_thomas.py"
-            exit 1
-        fi
+	python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to run simscript_thomas.py"
+        exit 1
+    fi
 	for width1 in $(seq $width_start $width_step $width_end); do
-	   for DM1 in $(seq $DM_start $DM_step $DM_end); do
-		width=$(python ../custom_round.py $width1 1)
-		DM=$(python ../custom_round.py $DM1 0)
+	    for DM1 in $(seq $DM_start $DM_step $DM_end); do
+			width=$(python ../custom_round.py $width1 1)
+			DM=$(python ../custom_round.py $DM1 0)
         	# Run the prepdata command
-		echo "$width,$width_start,$width_step" 
+			echo "$width,$width_start,$width_step" 
         	prepdata -nobary -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run prepdata"
@@ -76,10 +76,10 @@ if [ "$1" = "range" ]; then
         	fi
 
         	#extract the Sigma values from the file
-		#echo "$width,$width_start,$width_step"
-		dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
+		    #echo "$width,$width_start,$width_step"
+		    dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
                 width_index=$( echo "($width - $width_start) / $width_step " | bc)
-		#echo "$width_index=$width_index,dm_index=$dm_index"
+		    #echo "$width_index=$width_index,dm_index=$dm_index"
        		result=$(awk '
                     # Skip lines starting with a comment character (#)
                     $1 ~ /^#/ { next }
@@ -91,16 +91,16 @@ if [ "$1" = "range" ]; then
                     echo "Error: Failed to extract Sigma values"
                     exit 1
                 fi
-		echo "Sigma = $result"
-		if [ -z "$result" ]; then
+		    echo "Sigma = $result"
+			if [ -z "$result" ]; then
 			#echo "$dm_index,$width_index,$result"
 			matrix[$width_index,$dm_index]=0
-		else
+		    else
 			#echo "$dm_index,$width_index,$result"
-			matrix[$width_index,$dm_index]=$result
-		fi
-		#echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
-	   done
+			    matrix[$width_index,$dm_index]=$result
+		    fi
+		    #echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
+	    done
 	done
 	dm_index=$(echo " ($DM_end - $DM_start) / $DM_step " | bc)
 	width_index=$(echo " ($width_end - $width_start) / $width_step " | bc)
@@ -115,8 +115,8 @@ if [ "$1" = "range" ]; then
 else
 	# Check if the correct number of arguments is provided
 	if [ "$#" -ne 2 ]; then
-    		echo "Error: Invalid number of arguments."
-    		usage
+    	echo "Error: Invalid number of arguments."
+    	usage
 	fi
 
 	DM=$1
