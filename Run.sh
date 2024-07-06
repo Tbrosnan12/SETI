@@ -54,7 +54,7 @@ if [ "$1" = "range" ]; then
 			DM=$(python ../custom_round.py $DM1 0)
         	# Run the prepdata command
 			echo "$width,$width_start,$width_step" 
-        	prepdata -nobary -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
+        	prepdata -nobary -dm ${DM} -noclip -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run prepdata"
         	    exit 1
