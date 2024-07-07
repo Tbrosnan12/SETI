@@ -81,8 +81,8 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
             # print(model.L2_snr()[0][:-2]+";"+str(dynspec.L2_snr(base2/model.L2_snr()[1]*50))+"\n")
             for printloop in range(npulse):  ### how many pulses in the data
                 model.writenoise(nsamp=nsamp)
-                #print(model.write_snr()[1],i,j,SN_array)
-                SN_array[int((j-dm_start)/step),int((i-sig_start)/sig_step)]=float(model.write_snr()[1])
+                print(round((j-dm_start)/step),round((i-sig_start)/sig_step))
+                SN_array[round((j-dm_start)/step),round((i-sig_start)/sig_step)]=float(model.write_snr()[1])
                 #print(model.write_snr()[1],i,j)
                 model.inject(base1/model.write_snr()[1]*ampl)
                 w.write(model.write_snr()[0][:-2]+";"+str(dynspec.L2_snr(base2/model.write_snr()[1]*50))+f";{xset}"+"\n")

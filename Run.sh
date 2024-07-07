@@ -37,37 +37,37 @@ if [ "$1" = "range" ]; then
 	DM_start=$2
 	DM_end=$3
 	DM_step=$4
-        width_start=$5
+    width_start=$5
 	width_end=$6
 	width_step=$7
-        amp=50
-	mode="single"
+    amp=50
+
         # Create the pulses
-	python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} -m ${mode} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
+	python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
     if [ $? -ne 0 ]; then
         echo "Error: Failed to run simscript_thomas.py"
         exit 1
     fi
 	for width1 in $(seq $width_start $width_step $width_end); do
 	    for DM1 in $(seq $DM_start $DM_step $DM_end); do
-		width=$(python ../custom_round.py $width1 1)
-		DM=$(python ../custom_round.py $DM1 0)
+			width=$(python ../custom_round.py $width1 1)
+			DM=$(python ../custom_round.py $DM1 0)
         	# Run the prepdata command
-		echo "$width,$width_start,$width_step" 
-        	prepdata -nobary -dm ${DM} -filterbank -noclip -o test_${mode}_dm${DM}_width${width} test_${mode}_dm${DM}_width${width}.fil | grep "Writing"
+		#echo "$width,$width_start,$width_step" 
+        	prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run prepdata"
         	    exit 1
         	fi
         	# Run the single_pulse_search.py command
-        	single_pulse_search.py -b test_${mode}_dm${DM}_width${width}.dat | grep "Found"
+        	single_pulse_search.py -b test_single_dm${DM}_width${width}.dat | grep "Found"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run single_pulse_search.py"
             	    exit 1
         	fi
 
 
-        	filename="test_${mode}_dm${DM}_width${width}.singlepulse"
+        	filename="test_single_dm${DM}_width${width}.singlepulse"
 
         	# Check if the file exists
         	if [ ! -f "$filename" ]; then
