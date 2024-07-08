@@ -68,7 +68,7 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
     print("starting injection\n")
     for i in sigmarange:  ### intrinsic standard deviation sigma
         for j in dmrange:  ### DM
-            model.create_filterbank(f"{testname}_dm{custom_round(j, 0)}_width{custom_round(i,1)}",std=18,base=127)
+            model.create_filterbank(f"{testname}_dm{custom_round(j, 0)}_width{custom_round(i,3)}",std=18,base=127)
             print(f"created file {testname}_dm{custom_round(j,0)}_width{custom_round(i, 1)}")
             # w=open(f"{testname}_dm{np.round(j,0)}_width{np.round(i,1).txt",'w')
             # print (f"make DM{i} width{j}\n")
@@ -81,7 +81,7 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
             # print(model.L2_snr()[0][:-2]+";"+str(dynspec.L2_snr(base2/model.L2_snr()[1]*50))+"\n")
             for printloop in range(npulse):  ### how many pulses in the data
                 model.writenoise(nsamp=nsamp)
-                print(round((j-dm_start)/step),round((i-sig_start)/sig_step))
+                #print(round((j-dm_start)/step),round((i-sig_start)/sig_step))
                 SN_array[round((j-dm_start)/step),round((i-sig_start)/sig_step)]=float(model.write_snr()[1])
                 #print(model.write_snr()[1],i,j)
                 model.inject(base1/model.write_snr()[1]*ampl)

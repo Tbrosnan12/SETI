@@ -15,6 +15,11 @@ if [ "$#" -lt 2 ]; then
     usage
 fi
 
+if [ -d "output_files" ]; then
+    rm -r "output_files"
+    echo "deleted output_files"
+fi
+
 # if statment here to deside waither one pulse is created or a range of pulses
 if [ "$1" = "range" ]; then
         # Check if the correct number of arguments is provided
@@ -31,19 +36,19 @@ if [ "$1" = "range" ]; then
         exit 1
     fi
     touch temp1.txt
-	touch temp2.txt
-	temp="temp2.txt"
+    touch temp2.txt
+    temp="temp2.txt"
 
-	DM_start=$2
-	DM_end=$3
-	DM_step=$4
+    DM_start=$2
+    DM_end=$3
+    DM_step=$4
     width_start=$5
-	width_end=$6
-	width_step=$7
+    width_end=$6
+    width_step=$7
     amp=50
 
-        # Create the pulses
-	python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
+    # Create the pulses
+    python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
     if [ $? -ne 0 ]; then
         echo "Error: Failed to run simscript_thomas.py"
         exit 1
@@ -119,19 +124,24 @@ else
     	usage
 	fi
 
+        mkdir output_files
+        cd output_files
+        touch temp1.txt
+        touch temp2.txt
+
 	DM=$1
 	width=$2
-	amp=50
-
+	amp=200
+        #echo "$width"
 	# Run the Python script
-	python simscript_thomas.py --dm_start $DM --dm $DM --step 100 --sig_start $width --sig_step 1 --sig $width -N 1 -A $amp -s 5000
+	python ../simscript_thomas.py --dm_start $DM --dm $DM --step 100 --sig_start $width --sig_step 1 --sig $width -N 1 -A $amp -s 5000
 	if [ $? -ne 0 ]; then
 	    echo "Error: Failed to run simscript_thomas.py"
 	    exit 1
 	fi
 
 	# Run the prepdata command
-	prepdata -nobary -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
+	prepdata -nobary -dm ${DM} -noclip -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
 	if [ $? -ne 0 ]; then
 	    echo "Error: Failed to run prepdata"
 	    exit 1
@@ -154,19 +164,23 @@ else
 	fi
 
 	#extract the DM values from the file
-	awk '
-	    # Skip lines starting with a comment character (#)
-	    $1 ~ /^#/ { next }
+	reported=$(awk '
+        # Skip lines starting with a comment character (#)
+        $1 ~ /^#/ { next } 
+        # Print the second column (DM value) and exit
+        { print $2; exit }
+        ' "$filename")
 
-	    # Print the first column (DM values)
-	    { print "DM value of pulse = " $1 }
-	    { print "Sigma value of pulse = " $2 }
-	' "$filename"
 	if [ $? -ne 0 ]; then
 	    echo "Error: Failed to extract DM values"
 	    exit 1
 	fi
-
+        #echo "reported=$reported"
+        read -r injected < "temp1.txt"
+        #echo "injected=$injected"
+        SN_ratio=$( echo  "$reported/$injected" | bc -l)
+        #echo "S/N_ratio = $reported/$injected = $SN_ratio"
+        echo " $SN_ratio"  > "temp2.txt"
 fi
 
 
