@@ -127,11 +127,11 @@ else
         mkdir output_files
         cd output_files
         touch temp1.txt
-        touch temp2.txt
+        touch ../temp2.txt
 
 	DM=$1
 	width=$2
-	amp=200
+	amp=50
         #echo "$width"
 	# Run the Python script
 	python ../simscript_thomas.py --dm_start $DM --dm $DM --step 100 --sig_start $width --sig_step 1 --sig $width -N 1 -A $amp -s 5000
@@ -167,7 +167,7 @@ else
 	reported=$(awk '
         # Skip lines starting with a comment character (#)
         $1 ~ /^#/ { next } 
-        # Print the second column (DM value) and exit
+        # Print the second column (sigma value) and exit
         { print $2; exit }
         ' "$filename")
 
@@ -180,7 +180,7 @@ else
         #echo "injected=$injected"
         SN_ratio=$( echo  "$reported/$injected" | bc -l)
         #echo "S/N_ratio = $reported/$injected = $SN_ratio"
-        echo " $SN_ratio"  > "temp2.txt"
+        echo " $SN_ratio"  >> "../temp2.txt"
 fi
 
 
