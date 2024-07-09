@@ -28,15 +28,17 @@ if [ "$1" = "range" ]; then
     	usage
     fi
 
-	mkdir output_files
-	cd output_files
-	declare -A matrix
-	if [ $? -ne 0 ]; then
+    mkdir output_files
+    cd output_files
+    declare -A matrix
+    if [ $? -ne 0 ]; then
         echo "Error: This script will only run using 'bash $0' as sh shell does not have declare -A matrix for some reason "
         exit 1
     fi
+    declare -A box_matrix
     touch temp1.txt
     touch temp2.txt
+    touch temp3.txt
     temp="temp2.txt"
 
     DM_start=$2
@@ -85,27 +87,41 @@ if [ "$1" = "range" ]; then
 		    dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
                 width_index=$( echo "($width - $width_start) / $width_step " | bc)
 		    #echo "$width_index=$width_index,dm_index=$dm_index"
-       		result=$(awk '
+       		sigma=$(awk '
                     # Skip lines starting with a comment character (#)
                     $1 ~ /^#/ { next }
 
                     # Print the Second column (Sigma values)
                     { print $2; exit }
                     ' "$filename")
-            if [ $? -ne 0 ]; then
-                echo "Error: Failed to extract Sigma values"
-                exit 1
-            fi
-		    echo "Sigma = $result"
-			if [ -z "$result" ]; then
-			#echo "$dm_index,$width_index,$result"
-			matrix[$width_index,$dm_index]=0
-		    else
-			#echo "$dm_index,$width_index,$result"
-			    matrix[$width_index,$dm_index]=$result
-		    fi
-		    #echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
-	    done
+                 if [ $? -ne 0 ]; then
+                     echo "Error: Failed to extract Sigma values"
+                     exit 1
+                 fi
+                 echo "Sigma = $sigma"
+                 if [ -z "$sigma" ]; then
+                      #echo "$dm_index,$width_index,$sigma"
+                      matrix[$width_index,$dm_index]=0
+                 else
+                      #echo "$dm_index,$width_index,$sigma"
+                      matrix[$width_index,$dm_index]=$sigma
+		 fi
+		 #echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
+                 boxcar=$(awk '
+                    # Skip lines starting with a comment character (#)
+                    $1 ~ /^#/ { next }
+
+                    # Print the Second column (Sigma values)
+                    { print $5; exit }
+                    ' "$filename")
+	        if [ -z "$boxcar" ]; then
+                      #echo "$dm_index,$width_index,$sigma"
+                      matrix[$width_index,$dm_index]=0
+                 else
+                      #echo "$dm_index,$width_index,$sigma"
+                      matrix[$width_index,$dm_index]=$boxcar
+                 fi
+            done
 	done
 	dm_index=$(echo " ($DM_end - $DM_start) / $DM_step " | bc)
 	width_index=$(echo " ($width_end - $width_start) / $width_step " | bc)

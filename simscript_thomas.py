@@ -2,6 +2,7 @@ import dynspec
 import matplotlib.pyplot as plt
 import numpy as np
 import math as m
+from matplotlib import cm
 
 def _main():
     from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
@@ -75,7 +76,8 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
             xset=0.5
             model.writenoise(nsamp=nsamp)
             model.writenoise(nsamp=nsamp)
-            base1,base2=model.burst(t0=tstart,dm=j,A=50,width=i,mode=mode,nsamp=nsamp,offset=xset,bandfrac=mask)
+            base1,base2=model.burst(t0=tstart,dm=j,A=50,width=i,mode=mode,nsamp=nsamp,offset=xset)
+            #print(N)
             # print(model.L2_snr())
             # print(i)
             # print(model.L2_snr()[0][:-2]+";"+str(dynspec.L2_snr(base2/model.L2_snr()[1]*50))+"\n")
@@ -86,16 +88,26 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
                 #print(model.write_snr()[1],i,j)
                 model.inject(base1/model.write_snr()[1]*ampl)
                 w.write(model.write_snr()[0][:-2]+";"+str(dynspec.L2_snr(base2/model.write_snr()[1]*50))+f";{xset}"+"\n")
-            # print(f" {np.round(i,1)}/11.1 completed", end = "\r")
+                # print(f" {np.round(i,1)}/11.1 completed", end = "\r")
                 model.writenoise(nsamp=nsamp)
             model.writenoise(nsamp=nsamp) ## write noise
             model.closefile()
     w.close()
+    norm = cm.colors.Normalize(vmax=base1.max(), vmin=0)
+    plt.figure(figsize=(6, 6))
+    plt.imshow(base1, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
+    cbar = plt.colorbar()
+    plt.title("PRESTO single_pulse_search", fontsize=15)
+    #plt.xlabel("$\sigma_{intrinsic}$ (ms)", fontsize=15)
+    #plt.ylabel("DM (pc cm$^{-3}$)", fontsize=15)
+    cbar.set_label("S/N Reported/Injected (%)", fontsize=15)
+    plt.tight_layout()
+    plt.savefig("base1.png")
     # Open a file in write mode
     with open('temp1.txt', 'w') as file:
-     for row in SN_array:
-        # Join elements of the row with spaces and write to the file
-        file.write(' '.join(map(str, row)) + '\n')
+      for row in SN_array:
+         # Join elements of the row with spaces and write to the file
+         file.write(' '.join(map(str, row)) + '\n')
     print("\nFinished creating filterbanks ")
 
 
