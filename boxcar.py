@@ -14,15 +14,15 @@ def read_file(filename):
     return array
 
 # Read the data from the files specified in the command-line arguments
-boxcars = read_file(sys.argv[2])
+boxcars = read_file(sys.argv[1])
 
 # Read the DM and width range parameters from the command-line arguments
-DM_start =float(sys.argv[3])
-DM_end = float(sys.argv[4])
-DM_step = float(sys.argv[5])
-width_start =float(sys.argv[6])
-width_end = float(sys.argv[7])
-width_step = float(sys.argv[8])
+DM_start =float(sys.argv[2])
+DM_end = float(sys.argv[3])
+DM_step = float(sys.argv[4])
+width_start =float(sys.argv[5])
+width_end = float(sys.argv[6])
+width_step = float(sys.argv[7])
 
 # Calculate the number of intervals for DM and width
 DM_int = (DM_end - DM_start) / DM_step + 1
@@ -34,7 +34,7 @@ N2 = 5
 
 
 
-norm = cm.colors.Normalize(vmax=boxcars.max(), vmin=0)
+norm = cm.colors.Normalize(vmax=30, vmin=0)
 plt.figure(figsize=(6, 6))
 plt.imshow(boxcars, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
 plt.xticks(np.arange(0, width_int, N1), np.arange(width_start, width_end + 0.5 * width_step, width_step * N1), fontsize=15)
@@ -45,5 +45,6 @@ cbar = plt.colorbar()
 plt.title("PRESTO single_pulse_search", fontsize=15)
 plt.xlabel("$\sigma_{intrinsic}$ (ms)", fontsize=15)
 plt.ylabel("DM (pc cm$^{-3}$)", fontsize=15)
-cbar.set_label("S/N Reported/Injected (%)", fontsize=15)
+cbar.set_label("Presto's downfact", fontsize=15)
 plt.tight_layout()
+plt.savefig("boxcar.png")

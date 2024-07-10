@@ -5,7 +5,9 @@ usage() {
     echo "  <DM>    : Dispersion Measure"
     echo "  <width> : Pulse width"
     echo "or for a range of DM's and width's:"
-    echo "Usage: $0 range <DM_start> <DM_end> <DM_step> <width_start> <width_end> <width_step>"	
+    echo "Usage: $0 range <DM_start> <DM_end> <DM_step> <width_start> <width_end> <width_step>"
+    echo "If data has already been generated and you want to just re-make plots:"
+    echo "Usage: $0 range <DM_start> <DM_end> <DM_step> <width_start> <width_end> <width_step> plot"
     exit 1
 }
 
@@ -15,31 +17,25 @@ if [ "$#" -lt 2 ]; then
     usage
 fi
 
-if [ -d "output_files" ]; then
-    rm -r "output_files"
-    echo "deleted output_files"
-fi
-
 # if statment here to deside waither one pulse is created or a range of pulses
 if [ "$1" = "range" ]; then
         # Check if the correct number of arguments is provided
-    if [ "$#" -ne 7 ]; then
+    if [ "$#" -lt 7 ]; then
     	echo "Error: Invalid number of arguments."
     	usage
     fi
 
-    mkdir output_files
-    cd output_files
     declare -A matrix
     if [ $? -ne 0 ]; then
         echo "Error: This script will only run using 'bash $0' as sh shell does not have declare -A matrix for some reason "
         exit 1
     fi
-    declare -A box_matrix
+    declare -A boxcar_matrix
     touch temp1.txt
     touch temp2.txt
     touch temp3.txt
-    temp="temp2.txt"
+    temp2="temp2.txt"
+    temp3="temp3.txt"
 
     DM_start=$2
     DM_end=$3
@@ -49,16 +45,27 @@ if [ "$1" = "range" ]; then
     width_step=$7
     amp=50
 
-    # Create the pulses
-    python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to run simscript_thomas.py"
-        exit 1
-    fi
+    if [[ "$#" == 8 ]] && [[ "$8" == "plot" ]]; then
+       echo "Remaking plots from data in output_files"
+       cd output_files
+    else
+        if [ -d "output_files" ]; then
+           rm -r "output_files"
+           echo "deleted output_files"
+        fi
+        mkdir output_files
+        cd output_files
+
+        # Create the pulses
+        python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
+        if [ $? -ne 0 ]; then
+           echo "Error: Failed to run simscript_thomas.py"
+           exit 1
+        fi
 	for width1 in $(seq $width_start $width_step $width_end); do
 	    for DM1 in $(seq $DM_start $DM_step $DM_end); do
-			width=$(python ../custom_round.py $width1 1)
-			DM=$(python ../custom_round.py $DM1 0)
+                width=$(python ../custom_round.py $width1 1)
+                DM=$(python ../custom_round.py $DM1 0)
         	# Run the prepdata command
 		#echo "$width,$width_start,$width_step" 
         	prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
@@ -114,25 +121,31 @@ if [ "$1" = "range" ]; then
                     # Print the Second column (Sigma values)
                     { print $5; exit }
                     ' "$filename")
+                echo "boxcar=$boxcar"
 	        if [ -z "$boxcar" ]; then
                       #echo "$dm_index,$width_index,$sigma"
-                      matrix[$width_index,$dm_index]=0
-                 else
+                      boxcar_matrix[$width_index,$dm_index]=0
+                else
                       #echo "$dm_index,$width_index,$sigma"
-                      matrix[$width_index,$dm_index]=$boxcar
-                 fi
+                      boxcar_matrix[$width_index,$dm_index]=$boxcar
+                fi
             done
 	done
 	dm_index=$(echo " ($DM_end - $DM_start) / $DM_step " | bc)
 	width_index=$(echo " ($width_end - $width_start) / $width_step " | bc)
 	for i in $(seq 0 1 $dm_index); do
 		row=""
+                row2=""
         	for j in $(seq 0 1 $width_index); do
 			row+=" ${matrix[$j,$i]}" 
-		done
-		echo "$row" >> "$temp"
-	done
-	python ../graph.py temp1.txt temp2.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+		        row2+=" ${boxcar_matrix[$j,$i]}"
+                done
+                echo "$row2" >> "$temp3"
+		echo "$row" >> "$temp2"
+        done
+     fi
+     python ../graph.py temp1.txt temp2.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+     python ../boxcar.py temp3.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
 else
 	# Check if the correct number of arguments is provided
 	if [ "$#" -ne 2 ]; then
@@ -140,6 +153,10 @@ else
     	usage
 	fi
 
+        if [ -d "output_files" ]; then
+           rm -r "output_files"
+           echo "deleted output_files"
+        fi
         mkdir output_files
         cd output_files
         touch temp1.txt
