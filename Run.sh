@@ -31,11 +31,6 @@ if [ "$1" = "range" ]; then
         exit 1
     fi
     declare -A boxcar_matrix
-    touch temp1.txt
-    touch temp2.txt
-    touch temp3.txt
-    temp2="temp2.txt"
-    temp3="temp3.txt"
 
     DM_start=$2
     DM_end=$3
@@ -55,7 +50,11 @@ if [ "$1" = "range" ]; then
         fi
         mkdir output_files
         cd output_files
-
+        touch temp1.txt
+        touch temp2.txt
+        touch temp3.txt
+        temp2="temp2.txt"
+        temp3="temp3.txt"
         # Create the pulses
         python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
         if [ $? -ne 0 ]; then
