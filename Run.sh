@@ -50,11 +50,10 @@ if [ "$1" = "range" ]; then
         fi
         mkdir output_files
         cd output_files
-        touch temp1.txt
-        touch temp2.txt
-        touch temp3.txt
-        temp2="temp2.txt"
-        temp3="temp3.txt"
+        touch injected_snr.txt
+        touch reported_snr.txt
+        touch boxcar.txt
+
         # Create the pulses
         python ../simscript_thomas.py --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
         if [ $? -ne 0 ]; then
@@ -139,12 +138,15 @@ if [ "$1" = "range" ]; then
 			row+=" ${matrix[$j,$i]}" 
 		        row2+=" ${boxcar_matrix[$j,$i]}"
                 done
-                echo "$row2" >> "$temp3"
-		echo "$row" >> "$temp2"
+                echo "$row2" >> "boxcar.txt"
+		echo "$row" >> "reported_snr.txt"
         done
      fi
-     python ../graph.py temp1.txt temp2.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
-     python ../boxcar.py temp3.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+     python ../graph.py injected_snr.txt reported_snr.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+     python ../boxcar.py boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+     if [ -f "heimdall.txt" ]; then
+         python ../graph.py injected_snr.txt heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+     fi
 else
 	# Check if the correct number of arguments is provided
 	if [ "$#" -ne 2 ]; then

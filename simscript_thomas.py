@@ -104,7 +104,7 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
     plt.tight_layout()
     plt.savefig("base1.png")
     # Open a file in write mode
-    with open('temp1.txt', 'w') as file:
+    with open('injected_snr.txt', 'w') as file:
       for row in SN_array:
          # Join elements of the row with spaces and write to the file
          file.write(' '.join(map(str, row)) + '\n')
