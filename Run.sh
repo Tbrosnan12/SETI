@@ -101,12 +101,24 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
                 width_index=$( echo "($width - $width_start) / $width_step " | bc)
 
                 sigma=$(awk '
-                    # Skip lines starting with a comment character (#)
-                    $1 ~ /^#/ { next }
+                      # Skip lines starting with a comment character (#)
+                      $1 ~ /^#/ { next }
+                      # Store the maximum value of the second column
+                      NR == 2 {
+                      max = $2
+                      next
+                      }
 
-                    # Print the Second column (Sigma values)
-                    { print $2; exit }
-                    ' "$filename")
+                      # Compare subsequent values in the second column to find the maximum
+                      NR > 2 && $2 > max {
+                      max = $2
+                      }
+
+                      # Stop processing after the second row
+                      NR > 2 { exit }
+
+                      END { print max }
+                      ' "$filename")
                  if [ $? -ne 0 ]; then
                      echo "Error: Failed to extract Sigma values"
                      exit 1
