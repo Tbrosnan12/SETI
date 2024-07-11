@@ -12,38 +12,44 @@ usage() {
 }
 
 # Check if the correct number of arguments is provided
-if [ "$#" -lt 2 ]; then
+if [ "$#" -lt 1 ]; then
     echo "Error: Invalid number of arguments."
     usage
 fi
 
 # if statment here to deside waither one pulse is created or a range of pulses
-if [ "$1" = "range" ]; then
-        # Check if the correct number of arguments is provided
-    if [ "$#" -lt 7 ]; then
-    	echo "Error: Invalid number of arguments."
-    	usage
-    fi
+if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
 
-    declare -A matrix
-    if [ $? -ne 0 ]; then
-        echo "Error: This script will only run using 'bash $0' as sh shell does not have declare -A matrix for some reason "
-        exit 1
-    fi
-    declare -A boxcar_matrix
-
-    DM_start=$2
-    DM_end=$3
-    DM_step=$4
-    width_start=$5
-    width_end=$6
-    width_step=$7
-    amp=50
-
-    if [[ "$#" == 8 ]] && [[ "$8" == "plot" ]]; then
+    if  [ "$1" == "plot" ]; then
        echo "Remaking plots from data in output_files"
        cd output_files
+       DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)
+       DM_end=$(awk 'NR == 2 { print $1 }' ranges.txt)
+       DM_step=$(awk 'NR == 3 { print $1 }' ranges.txt)
+       width_start=$(awk 'NR == 4 { print $1 }' ranges.txt)
+       width_end=$(awk 'NR == 5 { print $1 }' ranges.txt)
+       width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
     else
+        # Check if the correct number of arguments is provided
+        if [ "$#" -lt 7 ]; then
+            echo "Error: Invalid number of arguments."
+            usage
+        fi
+        DM_start=$2
+        DM_end=$3
+        DM_step=$4
+        width_start=$5
+        width_end=$6
+        width_step=$7
+        amp=50
+
+        declare -A matrix
+        if [ $? -ne 0 ]; then
+            echo "Error: This script will only run using 'bash $0' as sh shell does not have decla>
+            exit 1
+        fi
+        declare -A boxcar_matrix
+
         if [ -d "output_files" ]; then
            rm -r "output_files"
            echo "deleted output_files"
@@ -60,10 +66,13 @@ if [ "$1" = "range" ]; then
            echo "Error: Failed to run simscript_thomas.py"
            exit 1
         fi
+
 	for width1 in $(seq $width_start $width_step $width_end); do
 	    for DM1 in $(seq $DM_start $DM_step $DM_end); do
+
                 width=$(python ../custom_round.py $width1 1)
                 DM=$(python ../custom_round.py $DM1 0)
+
         	# Run the prepdata command
 		#echo "$width,$width_start,$width_step" 
         	prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
@@ -71,13 +80,13 @@ if [ "$1" = "range" ]; then
         	    echo "Error: Failed to run prepdata"
         	    exit 1
         	fi
+
         	# Run the single_pulse_search.py command
         	single_pulse_search.py -b test_single_dm${DM}_width${width}.dat | grep "Found"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run single_pulse_search.py"
             	    exit 1
         	fi
-
 
         	filename="test_single_dm${DM}_width${width}.singlepulse"
 
@@ -88,11 +97,10 @@ if [ "$1" = "range" ]; then
         	fi
 
         	#extract the Sigma values from the file
-		    #echo "$width,$width_start,$width_step"
-		    dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
+                dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
                 width_index=$( echo "($width - $width_start) / $width_step " | bc)
-		    #echo "$width_index=$width_index,dm_index=$dm_index"
-       		sigma=$(awk '
+
+                sigma=$(awk '
                     # Skip lines starting with a comment character (#)
                     $1 ~ /^#/ { next }
 
@@ -104,6 +112,7 @@ if [ "$1" = "range" ]; then
                      exit 1
                  fi
                  echo "Sigma = $sigma"
+
                  if [ -z "$sigma" ]; then
                       #echo "$dm_index,$width_index,$sigma"
                       matrix[$width_index,$dm_index]=0
@@ -111,7 +120,9 @@ if [ "$1" = "range" ]; then
                       #echo "$dm_index,$width_index,$sigma"
                       matrix[$width_index,$dm_index]=$sigma
 		 fi
+
 		 #echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
+
                  boxcar=$(awk '
                     # Skip lines starting with a comment character (#)
                     $1 ~ /^#/ { next }
@@ -141,6 +152,13 @@ if [ "$1" = "range" ]; then
                 echo "$row2" >> "boxcar.txt"
 		echo "$row" >> "reported_snr.txt"
         done
+        touch ranges.txt
+        echo $DM_start >> ranges.txt
+        echo $DM_end >> ranges.txt
+        echo $DM_step >> ranges.txt
+        echo $width_start >> ranges.txt
+        echo $width_end >> ranges.txt
+        echo $width_step >> ranges.txt
      fi
      python ../graph.py injected_snr.txt reported_snr.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
      python ../boxcar.py boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step

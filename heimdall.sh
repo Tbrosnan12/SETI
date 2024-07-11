@@ -1,16 +1,17 @@
 #!/bin/bash
 
-DM_start=$1
-DM_end=$2
-DM_step=$3
-width_start=$4
-width_end=$5
-width_step=$6
-
 cd output_files
+
+DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)
+DM_end=$(awk 'NR == 2 { print $1 }' ranges.txt)
+DM_step=$(awk 'NR == 3 { print $1 }' ranges.txt)
+width_start=$(awk 'NR == 4 { print $1 }' ranges.txt)
+width_end=$(awk 'NR == 5 { print $1 }' ranges.txt)
+width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 
 declare -A matrix
 touch heimdall.txt
+
 
 for file in *.fil; do
    mkdir "${file}.cands"
@@ -38,10 +39,11 @@ for file in *.fil; do
    cd ..
 done
 
-
-for i in $(seq 0 1 $dm_index); do
+dm_range=$(echo " ($DM_end - $DM_start) / $DM_step "| bc)
+width_range=$( echo "($width_end - $width_start) / $width_step " | bc)
+for i in $(seq 0 1 $dm_range); do
    row=""
-   for j in $(seq 0 1 $width_index); do
+   for j in $(seq 0 1 $width_range); do
        row+=" ${matrix[$j,$i]}"
    done
    echo "$row" >> "heimdall.txt"
