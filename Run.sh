@@ -20,7 +20,7 @@ fi
 # if statment here to deside waither one pulse is created or a range of pulses
 if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
 
-    if  [ "$1" == "plot" ]; then
+    if  [ "$1" = "plot" ]; then
        echo "Remaking plots from data in output_files"
        cd output_files
        DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)
@@ -45,7 +45,7 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
 
         declare -A matrix
         if [ $? -ne 0 ]; then
-            echo "Error: This script will only run using 'bash $0' as sh shell does not have decla>
+            echo "Error: This script will only run using 'bash $0' as sh shell does not have declare -A matrix for some reason"
             exit 1
         fi
         declare -A boxcar_matrix
@@ -160,10 +160,10 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
         echo $width_end >> ranges.txt
         echo $width_step >> ranges.txt
      fi
-     python ../graph.py injected_snr.txt reported_snr.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+     python ../graph.py injected_snr.txt reported_snr.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step presto
      python ../boxcar.py boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
      if [ -f "heimdall.txt" ]; then
-         python ../graph.py injected_snr.txt heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
+         python ../graph.py injected_snr.txt heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step heimdall
      fi
 else
 	# Check if the correct number of arguments is provided
