@@ -24,14 +24,14 @@ DM_step = float(sys.argv[5])
 width_start =float(sys.argv[6])
 width_end = float(sys.argv[7])
 width_step = float(sys.argv[8])
-
+name = sys.argv[9] 
 # Calculate the number of intervals for DM and width
 DM_int = (DM_end - DM_start) / DM_step + 1
 width_int = (width_end - width_start) / width_step + 1
 
 # Parameters for amont of boxs to skip for ticks
-N1 = 1
-N2 = 1
+N1 = 2
+N2 = 5
 
 # Calculate the percentage ratio of Reported to Injected values
 array = 100 * np.divide(Reported, Injected)
@@ -45,10 +45,10 @@ plt.yticks(np.arange(0, DM_int, N2), np.arange(DM_start, DM_end + 0.5 * DM_step,
 
 # plt.gca().invert_yaxis()
 cbar = plt.colorbar()
-plt.title("PRESTO single_pulse_search", fontsize=15)
+plt.title(f"{name} search", fontsize=15)
 plt.xlabel("$\sigma_{intrinsic}$ (ms)", fontsize=15)
 plt.ylabel("DM (pc cm$^{-3}$)", fontsize=15)
 cbar.set_label("S/N Reported/Injected (%)", fontsize=15)
 plt.tight_layout()
-plt.savefig("output.png")
+plt.savefig(f"{name}.png")
 
