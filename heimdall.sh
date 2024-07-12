@@ -18,12 +18,14 @@ for file in *.fil; do
    heimdall -f ${file} -dm 0 2500 -dm_tol 1.01 -cand_sep_filter 1 -boxcar_max 32 -baseline_length 20 -output_dir ${file}.cands -rfi_no_broad;
    cd ${file}.cands
 
+  echo "searching $file"
+
    DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
    width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
-   echo "dm=$DM,width=$width"
+
    dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
    width_index=$( echo "($width - $width_start) / $width_step " | bc)
-   echo "dm_index=$dm_index, width_index=$width_index"
+
    candfile=$( ls | head -n 1 )
    SNR=$(awk '
    # Print the First column (SNR values)

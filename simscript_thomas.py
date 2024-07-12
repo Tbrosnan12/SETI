@@ -73,10 +73,10 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
             print(f"created file {testname}_dm{custom_round(j,0)}_width{custom_round(i, 3)}")
             # w=open(f"{testname}_dm{np.round(j,0)}_width{np.round(i,1).txt",'w')
             # print (f"make DM{i} width{j}\n")
-            xset=0.5
+            xset=np.random.rand()-0.5
             model.writenoise(nsamp=nsamp)
             model.writenoise(nsamp=nsamp)
-            base1,base2=model.burst(t0=tstart,dm=j,A=50,width=i,mode=mode,nsamp=nsamp,offset=xset)
+            base1,base2=model.burst(t0=tstart,dm=j,A=20,width=i,mode=mode,nsamp=nsamp,offset=xset,tau=0)
             #print(N)
             # print(model.L2_snr())
             # print(i)
@@ -96,14 +96,14 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
 
     norm = cm.colors.Normalize(vmax=base1.max(), vmin=0)
     plt.figure(figsize=(6, 6))
-    plt.imshow(base2, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
+    plt.imshow(base1, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
     cbar = plt.colorbar()
     plt.title("PRESTO single_pulse_search", fontsize=15)
     plt.xlabel("freq", fontsize=15)
     plt.ylabel("time", fontsize=15)
     cbar.set_label("Pulse strength", fontsize=15)
     plt.tight_layout()
-    plt.savefig("base2.png")
+    plt.savefig("base1.png")
 
     # Open a file in write mode
     with open('injected_snr.txt', 'w') as file:
