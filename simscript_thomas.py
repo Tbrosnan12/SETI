@@ -93,16 +93,18 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
             model.writenoise(nsamp=nsamp) ## write noise
             model.closefile()
     w.close()
+
     norm = cm.colors.Normalize(vmax=base1.max(), vmin=0)
     plt.figure(figsize=(6, 6))
-    plt.imshow(base1, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
+    plt.imshow(base2, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
     cbar = plt.colorbar()
     plt.title("PRESTO single_pulse_search", fontsize=15)
-    #plt.xlabel("$\sigma_{intrinsic}$ (ms)", fontsize=15)
-    #plt.ylabel("DM (pc cm$^{-3}$)", fontsize=15)
-    cbar.set_label("S/N Reported/Injected (%)", fontsize=15)
+    plt.xlabel("freq", fontsize=15)
+    plt.ylabel("time", fontsize=15)
+    cbar.set_label("Pulse strength", fontsize=15)
     plt.tight_layout()
-    plt.savefig("base1.png")
+    plt.savefig("base2.png")
+
     # Open a file in write mode
     with open('injected_snr.txt', 'w') as file:
       for row in SN_array:
