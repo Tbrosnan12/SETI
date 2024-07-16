@@ -82,7 +82,7 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
         	fi
 
         	# Run the single_pulse_search.py command
-        	single_pulse_search.py -b test_single_dm${DM}_width${width}.dat | grep "Found"
+        	single_pulse_search.py -b -filterbank test_single_dm${DM}_width${width}.dat | grep "Found"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run single_pulse_search.py"
             	    exit 1
