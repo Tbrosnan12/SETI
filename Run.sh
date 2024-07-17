@@ -72,17 +72,19 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
 
                 width=$(python ../custom_round.py $width1 1)
                 DM=$(python ../custom_round.py $DM1 0)
-
+		
+                python ../invert.py test_single_dm${DM}_width${width}.fil | grep "nothing"
+                rm test_single_dm${DM}_width${width}.fil
         	# Run the prepdata command
 		#echo "$width,$width_start,$width_step" 
-        	prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} test_single_dm${DM}_width${width}.fil | grep "Writing"
+        	prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} -filterbank test_single_dm${DM}_width${width}.fil | grep "Writing"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run prepdata"
         	    exit 1
         	fi
 
         	# Run the single_pulse_search.py command
-        	single_pulse_search.py -b -filterbank test_single_dm${DM}_width${width}.dat | grep "Found"
+        	single_pulse_search.py -b test_single_dm${DM}_width${width}.dat | grep "Found"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run single_pulse_search.py"
             	    exit 1
