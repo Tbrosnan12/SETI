@@ -28,8 +28,16 @@ for file in *.fil; do
 
    candfile=$( ls | head -n 1 )
    SNR=$(awk '
-   # Print the First column (SNR values)
-   { print $1; exit }
+   # Store the maximum value of the first column
+   NR == 1 {
+   max = $1
+   next
+   }
+
+   NR > 1 && $1 > max {
+   max = $1
+   }
+   END { print max }
    ' "$candfile")
    #echo "$SNR"
 
