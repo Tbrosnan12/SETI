@@ -29,7 +29,7 @@ def _main():
     dmrange=np.arange(values.dm_start,values.dm+0.5*values.step,values.step)
     sig_start=custom_round(float(values.sig_start),1)
     sig=custom_round(float(values.sig),1)
-    sig_step=custom_round(float(values.sig_step),1)
+    sig_step=custom_round(float(values.sig_step),2)
     dm_start=custom_round(float(values.dm_start),0)
     dm=custom_round(float(values.dm),0)
     step=custom_round(float(values.step),0)
@@ -69,8 +69,8 @@ def snrbatch(fch1,bwchan,nchan,tsamp,mode,label,nsamp,npulse,sigmarange,dmrange,
     print("starting injection\n")
     for i in sigmarange:  ### intrinsic standard deviation sigma
         for j in dmrange:  ### DM
-            model.create_filterbank(f"{testname}_dm{custom_round(j, 0)}_width{custom_round(i,3)}",std=18,base=127)
-            print(f"created file {testname}_dm{custom_round(j,0)}_width{custom_round(i, 3)}")
+            model.create_filterbank(f"{testname}_dm{custom_round(j, 0)}_width{custom_round(i,2)}",std=18,base=127)
+            print(f"created file {testname}_dm{custom_round(j,0)}_width{custom_round(i, 2)}")
             # w=open(f"{testname}_dm{np.round(j,0)}_width{np.round(i,1).txt",'w')
             # print (f"make DM{i} width{j}\n")
             xset=np.random.rand()-0.5

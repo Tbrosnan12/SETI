@@ -4,10 +4,12 @@ usage() {
     echo "Usage: $0 <DM> <width>"
     echo "  <DM>    : Dispersion Measure"
     echo "  <width> : Pulse width"
-    echo "or for a range of DM's and width's:"
+    echo " "
+    echo "Or for a range of DM's and width's:"
     echo "Usage: $0 range <DM_start> <DM_end> <DM_step> <width_start> <width_end> <width_step>"
+    echo " "
     echo "If data has already been generated and you want to just re-make plots:"
-    echo "Usage: $0 range <DM_start> <DM_end> <DM_step> <width_start> <width_end> <width_step> plot"
+    echo "Usage: $0 range plot"
     exit 1
 }
 
@@ -70,14 +72,14 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
 	for width1 in $(seq $width_start $width_step $width_end); do
 	    for DM1 in $(seq $DM_start $DM_step $DM_end); do
 
-                width=$(python ../custom_round.py $width1 1)
+                width=$(python ../custom_round.py $width1 2)
                 DM=$(python ../custom_round.py $DM1 0)
-		
+
                 python ../invert.py test_single_dm${DM}_width${width}.fil | grep "nothing"
                 rm test_single_dm${DM}_width${width}.fil
         	# Run the prepdata command
 		#echo "$width,$width_start,$width_step" 
-        	prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} -filterbank test_single_dm${DM}_width${width}.fil | grep "Writing"
+        	prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} -filterbank test_single_dm${DM}_width${width}_inverted.fil | grep "Writing"
         	if [ $? -ne 0 ]; then
         	    echo "Error: Failed to run prepdata"
         	    exit 1
@@ -138,12 +140,26 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
 		 #echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
 
                  boxcar=$(awk '
-                    # Skip lines starting with a comment character (#)
-                    $1 ~ /^#/ { next }
+                 # Skip lines starting with a comment character (#)
+                 $1 ~ /^#/ { next }
+                 # Store the maximum value of the second column
+                 NR == 2 {
+                 max = $2
+                 maxb=$5
+                 next
+                 }
 
-                    # Print the Second column (Sigma values)
-                    { print $5; exit }
-                    ' "$filename")
+                 # Compare subsequent values in the second column to find the maximum
+                 NR > 2 && $2 > max {
+                 max = $2
+                 maxb=$5
+                 }
+
+                 # Stop processing after the second row
+                 NR > 2 { exit }
+
+                 END { print maxb }
+                ' "$filename")
                 echo "boxcar=$boxcar"
 	        if [ -z "$boxcar" ]; then
                       #echo "$dm_index,$width_index,$sigma"
