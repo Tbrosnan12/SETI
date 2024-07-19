@@ -101,45 +101,45 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
         	fi
 
         	#extract the Sigma values from the file
-                dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
-                width_index=$( echo "($width - $width_start) / $width_step " | bc)
+            dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
+            width_index=$( echo "($width - $width_start) / $width_step " | bc)
 
-                sigma=$(awk '
-                      # Skip lines starting with a comment character (#)
-                      $1 ~ /^#/ { next }
-                      # Store the maximum value of the second column
-                      NR == 2 {
-                      max = $2
-                      next
-                      }
+            sigma=$(awk '
+                # Skip lines starting with a comment character (#)
+                $1 ~ /^#/ { next }
+                # Store the maximum value of the second column
+                NR == 2 {
+                max = $2
+                next
+                }
 
-                      # Compare subsequent values in the second column to find the maximum
-                      NR > 2 && $2 > max {
-                      max = $2
-                      }
+                # Compare subsequent values in the second column to find the maximum
+                NR > 2 && $2 > max {
+                max = $2
+                }
 
-                      # Stop processing after the second row
-                      NR > 2 { exit }
+                # Stop processing after the second row
+                NR > 2 { exit }
 
-                      END { print max }
-                      ' "$filename")
-                 if [ $? -ne 0 ]; then
-                     echo "Error: Failed to extract Sigma values"
-                     exit 1
-                 fi
-                 echo "Sigma = $sigma"
+                END { print max }
+                ' "$filename")
+            if [ $? -ne 0 ]; then
+                echo "Error: Failed to extract Sigma values"
+                exit 1
+            fi
+            echo "Sigma = $sigma"
 
-                 if [ -z "$sigma" ]; then
-                      #echo "$dm_index,$width_index,$sigma"
-                      matrix[$width_index,$dm_index]=0
-                 else
-                      #echo "$dm_index,$width_index,$sigma"
-                      matrix[$width_index,$dm_index]=$sigma
-		 fi
+            if [ -z "$sigma" ]; then
+                #echo "$dm_index,$width_index,$sigma"
+                matrix[$width_index,$dm_index]=0
+            else
+                #echo "$dm_index,$width_index,$sigma"
+                matrix[$width_index,$dm_index]=$sigma
+	    	fi
 
 		 #echo "Values: $dm_index,$width_index, Value: ${matrix[$dm_index,$width_index]}"
 
-                 boxcar=$(awk '
+            boxcar=$(awk '
                  # Skip lines starting with a comment character (#)
                  $1 ~ /^#/ { next }
                  # Store the maximum value of the second column
