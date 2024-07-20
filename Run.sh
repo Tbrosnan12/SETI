@@ -9,7 +9,7 @@ usage() {
     echo "Usage: $0 range <DM_start> <DM_end> <DM_step> <width_start> <width_end> <width_step>"
     echo " "
     echo "If data has already been generated and you want to just re-make plots:"
-    echo "Usage: $0 range plot"
+    echo "Usage: $0 plot"
     exit 1
 }
 
@@ -190,11 +190,10 @@ if [[ "$1" = "range" ]] || [[ "$1" = "plot"  ]]; then
         echo $width_end >> ranges.txt
         echo $width_step >> ranges.txt
      fi
+
      python ../graph.py injected_snr.txt reported_snr.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step presto
      python ../boxcar.py boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
-     if [ -f "heimdall.txt" ]; then
-         python ../graph.py injected_snr.txt heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step heimdall
-     fi
+
 else
 	# Check if the correct number of arguments is provided
 	if [ "$#" -ne 2 ]; then
