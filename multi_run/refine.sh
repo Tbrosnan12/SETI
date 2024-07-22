@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -f "out.txt" ]; then 
+if [ -f "out.txt" ]; then
   rm out.txt
   echo "removed out.txt"
 fi
@@ -9,9 +9,11 @@ declare -A matrix
 
 n=$(ls -d iter* 2>/dev/null | wc -l)
 first=1
-echo "$n"
 
 for dir in iter*; do
+
+   echo -ne "refining iteration $dir / $n\r"
+
    cd $dir
    cd output_files
    mv injected_snr.txt ../
@@ -65,3 +67,5 @@ for i in $(seq 0 1 $dm_range); do
     done
     echo "$row" >> "out.txt"
 done
+
+python graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step presto

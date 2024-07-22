@@ -9,4 +9,4 @@ set val = $1
     mkdir "iter"$val; cd "iter"$val; cp ../../*py .; cp ../../*sh .
     schedtool -a $val -e bash Run.sh range 0 2500 100 1 10 1
 #    mv output_files/* "iter"$val && rm output_files/*
-    cd .. 
+    cd ..
