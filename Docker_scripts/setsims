@@ -7,7 +7,7 @@ git clone https://github.com/hqiu-nju/CRAFT-ICS-pipeline
 
 cd ..
 # Line to add to .bashrc
-line_to_add='export PYTHONPATH="/home/tbrosnan/Presto_test/Docker_scripts/sims/simfred:$PYTHONPATH"'
+line_to_add='export PYTHONPATH="/home/pulsarx/Presto_test/Docker_scripts/sims/simfred:$PYTHONPATH"'
 
 # Check if the line already exists in .bashrc
 if ! grep -Fxq "$line_to_add" ~/.bashrc; then
