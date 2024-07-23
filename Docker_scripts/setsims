@@ -7,7 +7,7 @@ git clone https://github.com/hqiu-nju/CRAFT-ICS-pipeline
 
 cd ..
 # Line to add to .bashrc
-dir=$(pwd
+dir=$(pwd)
 line_to_add='export PYTHONPATH="$dir/sims/simfred:$PYTHONPATH"'
 
 # Check if the line already exists in .bashrc
