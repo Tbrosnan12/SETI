@@ -57,22 +57,23 @@ else
       candfile=$(ls | grep '\.cands$')
       
       if [ -z "$candfile" ]; then
-      
-         echo "no result pulse for ${file}"
-         
-         SNR=$(awk '
-         # Store the maximum value of the sixth column
-         NR == 1 {
-         max = $6
-         next
-         }
 
-         NR > 1 && $6 > max {
-         max = $6
-         }
-         END { print max }
-         ' "$candfile")
-      fi 
+          echo "no result pulse for ${file}"
+      
+      else  
+          SNR=$(awk '
+          # Store the maximum value of the sixth column
+          NR == 1 {
+          max = $6
+          next
+          }
+
+          NR > 1 && $6 > max {
+          max = $6
+          }
+          END { print max }
+          ' "$candfile")
+      fi
 
       
       if [ -z "$SNR" ]; then
