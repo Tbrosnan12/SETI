@@ -74,7 +74,7 @@ else
           END { print max }
           ' "$candfile")
       fi
-
+      echo "SNR=$SNR"
       
       if [ -z "$SNR" ]; then
          matrix[$width_index,$dm_index]=0
@@ -85,7 +85,7 @@ else
       cd ..
    done
 
-   dm_range=$(echo " ($DM_end - $DM_start) / $DM_step "| python3)
+   dm_range=$(echo "($DM_end - $DM_start) / $DM_step "| python3)
    width_range=$( echo "($width_end - $width_start) / $width_step " | python3)
    for i in $(seq 0 1 $dm_range); do
       row=""
