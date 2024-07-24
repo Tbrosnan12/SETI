@@ -92,7 +92,7 @@ else
       for j in $(seq 0 1 $width_range); do
          row+=" ${matrix[$j,$i]}"
       done
-      echo "$row" >> "${model}.txt"
+      echo "$row" >> "${model}_output/${model}.txt"
    done
 fi
 
