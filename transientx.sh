@@ -49,8 +49,8 @@ else
       echo "searching $file"
 
 
-      dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
-      width_index=$( echo "($width - $width_start) / $width_step " | bc)
+      dm_index=$(echo " ($DM - $DM_start) / $DM_step "| python3)
+      width_index=$( echo "($width - $width_start) / $width_step " | python3)
 
       candfile=$(ls | grep '\.cands$')
 
@@ -89,4 +89,4 @@ else
 fi
 
 
-python ../graph.py injected_snr.txt transientx_output/transientx.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step transientx
+python3 ../graph.py injected_snr.txt transientx_output/transientx.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step transientx
