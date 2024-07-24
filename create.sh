@@ -32,6 +32,17 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
+for width1 in $(seq $width_start $width_step $width_end); do
+	for DM1 in $(seq $DM_start $DM_step $DM_end); do
+
+      width=$(python3 ../custom_round.py $width1 2)
+      DM=$(python3 ../custom_round.py $DM1 0)
+ 
+      python3 ../invert.py test_single_dm${DM}_width${width}.fil | grep "nothing"
+      rm test_single_dm${DM}_width${width}.fil
+   done
+done 
+   
 touch ranges.txt
 echo $DM_start >> ranges.txt
 echo $DM_end >> ranges.txt
