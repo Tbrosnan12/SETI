@@ -54,7 +54,7 @@ else
       dm_index=$(echo "($DM - $DM_start) / $DM_step"| python3)
       width_index=$( echo "($width - $width_start) / $width_step" | python3)
 
-      candfile=$(ls | grep '\.cands$')
+      candfile=$(ls *.cands 2>/dev/null | head -n 1)
       
       if [ -z "$candfile" ]; then
           echo "$candfile"
@@ -72,7 +72,7 @@ else
           max = $6
           }
           END { print max }
-          ' "$candfile")
+          ' "$candfile")   
       fi
       echo "SNR=$SNR"
       
