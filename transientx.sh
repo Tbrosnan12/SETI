@@ -27,38 +27,42 @@ width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 if [ "$#" == 1 ] && [ $1 =="plot" ]; then
     echo "remaking plot"
 else 
-   if [ -d "heimdall_output" ]; then
-       rm -r heimdall_output
-   echo "deleted previous heimdall test data"
+   if [ -d "transientx_output" ]; then
+       rm -r transientx_output
+   echo "deleted previous transientx test data"
    fi
 
    declare -A matrix
-   mkdir heimdall_output
-   touch heimdall_output/heimdall.txt
+   mkdir transientx_output
+   touch transientx_output/transientx.txt
 
    for file in *.fil; do
-      mkdir "heimdall_output/${file}.cands"                                               #dedispersing and searching 
-      heimdall -f ${file} -dm 0 2500 -dm_tol 1.01 -cand_sep_filter 1 -boxcar_max 32 -baseline_length 20 -output_dir heimdall_output/${file}.cands -rfi_no_broad;
-      cd heimdall_output/${file}.cands
-
-      echo "searching $file"
 
       DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
       width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
 
+      mkdir "transientx_output/${file}.transientx"  
+      cd transientx_output/${file}.transientx                                             #dedispersing and searching 
+      transientx_fil -f ../../test_single_dm100_width1_inverted.fil --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage
+
+
+      echo "searching $file"
+
+
       dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
       width_index=$( echo "($width - $width_start) / $width_step " | bc)
 
-      candfile=$( ls | head -n 1 )
+      candfile=$(ls | grep '\.cands$')
+
       SNR=$(awk '
-      # Store the maximum value of the first column
+      # Store the maximum value of the sixth column
       NR == 1 {
-      max = $1
+      max = $6
       next
       }
 
-      NR > 1 && $1 > max {
-      max = $1
+      NR > 1 && $6 > max {
+      max = $6
       }
       END { print max }
       ' "$candfile")
@@ -80,9 +84,9 @@ else
       for j in $(seq 0 1 $width_range); do
          row+=" ${matrix[$j,$i]}"
       done
-      echo "$row" >> "heimdall.txt"
+      echo "$row" >> "transientx.txt"
    done
 fi
 
 
-python ../graph.py injected_snr.txt heimdall_output/heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step heimdall
+python ../graph.py injected_snr.txt transientx_output/transientx.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step transientx
