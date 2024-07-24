@@ -57,7 +57,7 @@ else
       candfile=$(ls | grep '\.cands$')
       
       if [ -z "$candfile" ]; then
-
+          echo "$candfile"
           echo "no result pulse for ${file}"
       
       else  
