@@ -31,7 +31,7 @@ if [ $? -ne 0 ]; then
    echo "Error: Failed to run simscript_thomas.py"
    exit 1
 fi
-
+echo "Inverting filterbanks"
 for width1 in $(seq $width_start $width_step $width_end); do
 	for DM1 in $(seq $DM_start $DM_step $DM_end); do
 
@@ -50,3 +50,5 @@ echo $DM_step >> ranges.txt
 echo $width_start >> ranges.txt
 echo $width_end >> ranges.txt
 echo $width_step >> ranges.txt
+
+echo "Finished Inverting" 

@@ -12,7 +12,7 @@ if [ -f "output_files" ]; then
    cd output_files
 else 
    echo "Warning: need to generate filterbanks in /output_files first"
-   usage()
+   usage
 fi
 
 DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)

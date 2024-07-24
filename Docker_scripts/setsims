@@ -4,6 +4,7 @@ cd sims
 
 git clone https://github.com/hqiu-nju/simfred
 git clone https://github.com/hqiu-nju/CRAFT-ICS-pipeline
+pip install git+https://github.com/telegraphic/sigpyproc
 
 cd ..
 # Line to add to .bashrc
