@@ -8,7 +8,7 @@ usage() {
     exit 1
 }
 
-if [ -f "output_files" ]; then 
+if [ -d "output_files" ]; then 
    cd output_files
 else 
    echo "Warning: need to generate filterbanks in /output_files first"
@@ -42,7 +42,7 @@ else
       width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
 
       mkdir "transientx_output/${file}.transientx"  
-      cd transientx_output/${file}.transientx                                             #dedispersing and searching 
+      cd transientx_output/${file}.transientx                                        #dedispersing and searching 
       transientx_fil -f ../../test_single_dm100_width1_inverted.fil --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage
 
 
