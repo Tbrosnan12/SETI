@@ -59,7 +59,7 @@ else
       if [ -z "$candfile" ]; then
           echo "$candfile"
           echo "no result pulse for ${file}"
-      
+          SNR=0
       else  
           SNR=$(awk '
           # Store the maximum value of the sixth column
