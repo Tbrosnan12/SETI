@@ -8,6 +8,8 @@ usage() {
     exit 1
 }
 
+model=transientx
+
 if [ -d "output_files" ]; then 
    cd output_files
 else 
@@ -27,22 +29,22 @@ width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 if [ "$#" == 1 ] && [ $1 =="plot" ]; then
     echo "remaking plot"
 else 
-   if [ -d "transientx_output" ]; then
-       rm -r transientx_output
-   echo "deleted previous transientx test data"
+   if [ -d "${model}_output" ]; then
+       rm -r ${model}_output
+   echo "deleted previous ${model} test data"
    fi
 
    declare -A matrix
-   mkdir transientx_output
-   touch transientx_output/transientx.txt
+   mkdir ${model}_output
+   touch ${model}_output/${model}.txt
 
    for file in *.fil; do
 
       DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
       width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
 
-      mkdir "transientx_output/${file}.transientx"  
-      cd transientx_output/${file}.transientx                                        #dedispersing and searching 
+      mkdir "${model}_output/${file}.${model}"  
+      cd ${model}_output/${file}.${model}                                        #dedispersing and searching 
       transientx_fil -f ../../test_single_dm100_width1_inverted.fil --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage
 
 
@@ -53,6 +55,11 @@ else
       width_index=$( echo "($width - $width_start) / $width_step" | python3)
 
       candfile=$(ls | grep '\.cands$')
+      
+      if [ -z "$candfile" ]; then
+         echo "no result pulse for ${file}"
+         exit
+      fi 
 
       SNR=$(awk '
       # Store the maximum value of the sixth column
@@ -77,16 +84,16 @@ else
       cd ..
    done
 
-   dm_range=$(echo " ($DM_end - $DM_start) / $DM_step "| bc)
-   width_range=$( echo "($width_end - $width_start) / $width_step " | bc)
+   dm_range=$(echo " ($DM_end - $DM_start) / $DM_step "| python3)
+   width_range=$( echo "($width_end - $width_start) / $width_step " | python3)
    for i in $(seq 0 1 $dm_range); do
       row=""
       for j in $(seq 0 1 $width_range); do
          row+=" ${matrix[$j,$i]}"
       done
-      echo "$row" >> "transientx.txt"
+      echo "$row" >> "${model}.txt"
    done
 fi
 
 
-python3 ../graph.py injected_snr.txt transientx_output/transientx.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step transientx
+python3 ../graph.py injected_snr.txt ${model}_output/${model}.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
