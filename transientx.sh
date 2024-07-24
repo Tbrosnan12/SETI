@@ -49,8 +49,8 @@ else
       echo "searching $file"
 
 
-      dm_index=$(echo " ($DM - $DM_start) / $DM_step "| python3)
-      width_index=$( echo "($width - $width_start) / $width_step " | python3)
+      dm_index=$(echo "($DM - $DM_start) / $DM_step"| python3)
+      width_index=$( echo "($width - $width_start) / $width_step" | python3)
 
       candfile=$(ls | grep '\.cands$')
 
