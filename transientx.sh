@@ -72,7 +72,7 @@ else
           max = $6
           }
           END { print max }
-          ' "$candfile")   
+          ' "$candfile")      
       fi
       echo "SNR=$SNR"
       
@@ -87,6 +87,8 @@ else
 
    dm_range=$(echo "($DM_end - $DM_start) / $DM_step "| python3)
    width_range=$( echo "($width_end - $width_start) / $width_step " | python3)
+   echo "dm_range=$dm_range"
+   echo "width_range=$width_range"
    for i in $(seq 0 1 $dm_range); do
       row=""
       for j in $(seq 0 1 $width_range); do
