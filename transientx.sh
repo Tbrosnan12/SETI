@@ -51,8 +51,8 @@ else
       echo "searching $file"
 
 
-      dm_range=$(python3 -c "print(($DM_end - $DM_start) / $DM_step)")
-      width_range=$(python3 -c "print(($width_end - $width_start) / $width_step)")
+      dm_index=$(python3 -c "print(($DM_end - $DM_start) / $DM_step)")
+      width_index=$(python3 -c "print(($width_end - $width_start) / $width_step)")
 
 
       candfile=$(ls *.cands 2>/dev/null | head -n 1)
