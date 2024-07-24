@@ -51,8 +51,9 @@ else
       echo "searching $file"
 
 
-      dm_index=$(echo "($DM - $DM_start) / $DM_step"| python3)
-      width_index=$( echo "($width - $width_start) / $width_step" | python3)
+      dm_range=$(python3 -c "print(($DM_end - $DM_start) / $DM_step)")
+      width_range=$(python3 -c "print(($width_end - $width_start) / $width_step)")
+
 
       candfile=$(ls *.cands 2>/dev/null | head -n 1)
       
@@ -85,10 +86,9 @@ else
       cd ..
    done
 
-   dm_range=$(echo "($DM_end - $DM_start) / $DM_step "| python3)
-   width_range=$( echo "($width_end - $width_start) / $width_step " | python3)
-   echo "dm_range=$dm_range"
-   echo "width_range=$width_range"
+   dm_range=$(python3 -c "print(($DM_end - $DM_start) / $DM_step)")
+   width_range=$(python3 -c "print(($width_end - $width_start) / $width_step)")
+
    for i in $(seq 0 1 $dm_range); do
       row=""
       for j in $(seq 0 1 $width_range); do
