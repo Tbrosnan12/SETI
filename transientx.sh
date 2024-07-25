@@ -51,14 +51,15 @@ else
       echo "searching $file"
 
 
-      dm_index=$(python3 -c "print(($DM_end - $DM_start) / $DM_step)")
-      width_index=$(python3 -c "print(($width_end - $width_start) / $width_step)")
-
+      dm_index=$(python3 -c "print(($DM - $DM_start) / $DM_step)")
+      width_index=$(python3 -c "print(($width - $width_start) / $width_step)")
+      echo "dm_index=$dm_index"
+      echo "width_index=$width_index"
 
       candfile=$(ls *.cands 2>/dev/null | head -n 1)
       
       if [ -z "$candfile" ]; then
-          echo "$candfile"
+          echo "candfile=$candfile"
           echo "no result pulse for ${file}"
           SNR=0
       else  
@@ -75,7 +76,6 @@ else
           END { print max }
           ' "$candfile")      
       fi
-      echo "SNR=$SNR"
       
       if [ -z "$SNR" ]; then
          matrix[$width_index,$dm_index]=0
@@ -88,7 +88,8 @@ else
 
    dm_range=$(python3 -c "print(($DM_end - $DM_start) / $DM_step)")
    width_range=$(python3 -c "print(($width_end - $width_start) / $width_step)")
-
+   echo "dm_range=$dm_range"
+   echo "width_range=$width_range"
    for i in $(seq 0 1 $dm_range); do
       row=""
       for j in $(seq 0 1 $width_range); do
