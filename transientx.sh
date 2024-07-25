@@ -45,7 +45,7 @@ else
 
       mkdir "${model}_output/${file}.${model}"  
       cd ${model}_output/${file}.${model}                                        #dedispersing and searching 
-      transientx_fil -v -f ../../${file} --dms ${DM} --ddm 0 --ndm 1 --thre 4 --saveimage --zapthre 0
+      transientx_fil -v -f ../../${file} --dms ${DM} --ddm 0 --ndm 1 --thre 4 --saveimage --zapthre 20
 
 
       echo "searching $file"
