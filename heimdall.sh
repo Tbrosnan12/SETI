@@ -8,7 +8,7 @@ usage() {
     exit 1
 }
 
-if [ -f "output_files" ]; then 
+if [ -d "output_files" ]; then 
    cd output_files
 else 
    echo "Warning: need to generate filterbanks in /output_files first"
