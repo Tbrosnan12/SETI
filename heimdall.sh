@@ -48,22 +48,31 @@ else
 
       dm_index=$(python3 -c "print(int(($DM - $DM_start) / $DM_step))")
       width_index=$(python3 -c "print(int(($width - $width_start) / $width_step))")
+      echo "dm_index=$dm_index"
+      echo "width_index=$width_index"
 
       candfile=$( ls | head -n 1 )
-      SNR=$(awk '
-      # Store the maximum value of the first column
-      NR == 1 {
-      max = $1
-      next
-      }
 
-      NR > 1 && $1 > max {
-      max = $1
-      }
-      END { print max }
-      ' "$candfile")
-      #echo "$SNR"
+      if [ -z "$candfile" ]; then
+          echo "candfile=$candfile"
+          echo "no result pulse for ${file}"
+          SNR=0
+      else 
+         SNR=$(awk '
+         # Store the maximum value of the first column
+         NR == 1 {
+         max = $1
+         next
+         }
 
+         NR > 1 && $1 > max {
+         max = $1
+         }
+         END { print max }
+         ' "$candfile")
+         #echo "$SNR"
+      fi
+      
       if [ -z "$SNR" ]; then
          matrix[$width_index,$dm_index]=0
       else
@@ -80,7 +89,7 @@ else
       for j in $(seq 0 1 $width_range); do
          row+=" ${matrix[$j,$i]}"
       done
-      echo "$row" >> "heimdall.txt"
+      echo "$row" >> "heimdall_output/heimdall.txtheimdall.txt"
    done
 fi
 
