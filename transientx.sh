@@ -51,8 +51,8 @@ else
       echo "searching $file"
 
 
-      dm_index=$(python3 -c "print(($DM - $DM_start) / $DM_step)")
-      width_index=$(python3 -c "print(($width - $width_start) / $width_step)")
+      dm_index=$(python3 -c "print(int(($DM - $DM_start) / $DM_step))")
+      width_index=$(python3 -c "print(int(($width - $width_start) / $width_step))")
       echo "dm_index=$dm_index"
       echo "width_index=$width_index"
 
@@ -86,8 +86,8 @@ else
       cd ..
    done
 
-   dm_range=$(python3 -c "print(($DM_end - $DM_start) / $DM_step)")
-   width_range=$(python3 -c "print(($width_end - $width_start) / $width_step)")
+   dm_range=$(python3 -c "print(int(($DM_end - $DM_start) / $DM_step))")
+   width_range=$(python3 -c "print(int(($width_end - $width_start) / $width_step))")
    echo "dm_range=$dm_range"
    echo "width_range=$width_range"
    for i in $(seq 0 1 $dm_range); do
