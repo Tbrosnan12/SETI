@@ -26,7 +26,7 @@ cd output_files
 touch injected_snr.txt
 
 # Create the pulses
-python3 ../simscript_thomas.py  --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1000 -A $amp -s 5000
+python3 ../simscript_thomas.py  --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
 if [ $? -ne 0 ]; then
    echo "Error: Failed to run simscript_thomas.py"
    exit 1
