@@ -45,7 +45,7 @@ else
 
       mkdir "${model}_output/${file}.${model}"  
       cd ${model}_output/${file}.${model}                                        #dedispersing and searching 
-      transientx_fil -v -f ../../${file} --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage --maxncand 1000
+      transientx_fil -v -f ../../${file} --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage --maxncand 1000 --snrloss
 
 
       echo "searching $file"
@@ -101,3 +101,4 @@ fi
 
 
 python3 ../graph.py injected_snr.txt ${model}_output/${model}.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
+cat output_files/transientx_output/transientx.txt
