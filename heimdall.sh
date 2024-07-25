@@ -12,7 +12,7 @@ if [ -f "output_files" ]; then
    cd output_files
 else 
    echo "Warning: need to generate filterbanks in /output_files first"
-   usage()
+   usage
 fi
 
 DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)
@@ -46,8 +46,8 @@ else
       DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
       width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
 
-      dm_index=$(echo " ($DM - $DM_start) / $DM_step "| bc)
-      width_index=$( echo "($width - $width_start) / $width_step " | bc)
+      dm_index=$(python3 -c "print(int(($DM - $DM_start) / $DM_step))")
+      width_index=$(python3 -c "print(int(($width - $width_start) / $width_step))")
 
       candfile=$( ls | head -n 1 )
       SNR=$(awk '
@@ -73,8 +73,8 @@ else
       cd ..
    done
 
-   dm_range=$(echo " ($DM_end - $DM_start) / $DM_step "| bc)
-   width_range=$( echo "($width_end - $width_start) / $width_step " | bc)
+   dm_range=$(python3 -c "print(int(($DM_end - $DM_start) / $DM_step))")
+   width_range=$(python3 -c "print(int(($width_end - $width_start) / $width_step))")
    for i in $(seq 0 1 $dm_range); do
       row=""
       for j in $(seq 0 1 $width_range); do
@@ -85,4 +85,4 @@ else
 fi
 
 
-python ../graph.py injected_snr.txt heimdall_output/heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step heimdall
+python3 ../graph.py injected_snr.txt heimdall_output/heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step heimdall
