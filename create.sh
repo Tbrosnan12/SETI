@@ -38,8 +38,8 @@ for width1 in $(seq $width_start $width_step $width_end); do
       width=$(python3 ../custom_round.py $width1 2)
       DM=$(python3 ../custom_round.py $DM1 0)
  
-      python3 ../invert.py test_single_dm${DM}_width${width}.fil | grep "nothing"
-      rm test_single_dm${DM}_width${width}.fil
+      #python3 ../invert.py test_single_dm${DM}_width${width}.fil | grep "nothing"
+      #rm test_single_dm${DM}_width${width}.fil
    done
 done 
    
