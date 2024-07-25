@@ -15,7 +15,7 @@ DM_step=$3
 width_start=$4
 width_end=$5
 width_step=$6
-amp=50
+amp=100
 
 if [ -d "output_files" ]; then
    rm -r "output_files"
