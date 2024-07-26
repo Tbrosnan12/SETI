@@ -37,7 +37,7 @@ N2 = 5
 array = 100 * np.divide(Reported, Injected)
 
 
-norm = cm.colors.Normalize(vmax=105, vmin=70)
+norm = cm.colors.Normalize(vmax=100, vmin=50)
 plt.figure(figsize=(6, 6))
 plt.imshow(array, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
 plt.xticks(np.arange(0, width_int, N1), np.arange(width_start, width_end + 0.5 * width_step, width_step * N1), fontsize=15)
