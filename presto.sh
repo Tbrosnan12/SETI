@@ -8,7 +8,7 @@ usage() {
     exit 1
 }
 
-model=transientx
+model=presto 
 
 if [ -d "output_files" ]; then 
    cd output_files
@@ -35,28 +35,29 @@ else
    fi
 
    declare -A matrix
-   mkdir ${model}_output
+   mkdir ${model}_output 
    touch ${model}_output/${model}.txt
-
+  
    for file in *.fil; do
-
+      cd ${model}_output/   
       DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
       width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
+ 
+                                            #dedispersing 
+      prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} -filterbank ../test_single_dm${DM}_width${width}_inverted.fil | grep "Writing"
 
-      mkdir "${model}_output/${file}.${model}"  
-      cd ${model}_output/${file}.${model}                                        #dedispersing and searching 
-      transientx_fil -v -f ../../${file} --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage --maxw 0.07 --iqr
-
-
+     
       echo "searching $file"
+
+      single_pulse_search.py -b test_single_dm${DM}_width${width}.dat | grep "Found"
 
 
       dm_index=$(python3 -c "print(int(($DM - $DM_start) / $DM_step))")
       width_index=$(python3 -c "print(int(($width - $width_start) / $width_step))")
-      echo "dm_index=$dm_index"
-      echo "width_index=$width_index"
+      
 
-      candfile=$(ls *.cands 2>/dev/null | head -n 1)
+
+      candfile="test_single_dm${DM}_width${width}.singlepulse"
       
       if [ -z "$candfile" ]; then
           echo "candfile=$candfile"
@@ -64,17 +65,24 @@ else
           SNR=0
       else  
           SNR=$(awk '
-          # Store the maximum value of the sixth column
-          NR == 1 {
-          max = $6
-          next
-          }
+              # Skip lines starting with a comment character (#)
+              $1 ~ /^#/ { next }
+              # Store the maximum value of the second column
+              NR == 2 {
+              max = $2
+              next
+              }
 
-          NR > 1 && $6 > max {
-          max = $6
-          }
-          END { print max }
-          ' "$candfile")      
+              # Compare subsequent values in the second column to find the maximum
+              NR > 2 && $2 > max {
+              max = $2
+              }
+
+              # Stop processing after the second row
+              NR > 2 { exit }
+
+              END { print max }  
+              ' "$filename")    
       fi
       
       if [ -z "$SNR" ]; then
