@@ -26,7 +26,7 @@ width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 
 
 # Check if the correct number of arguments is provided
-if [ "$#" == 1 ] && [ $1 =="plot" ]; then
+if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
 else 
    if [ -d "${model}_output" ]; then
@@ -58,8 +58,8 @@ else
 
 
       candfile="test_single_dm${DM}_width${width}.singlepulse"
-      echo $(pwd)
-      echo "$candfile"
+      #echo $(pwd)
+      #echo "$candfile"
       if [ -z "$candfile" ]; then
           echo "candfile=$candfile"
           echo "no result pulse for ${file}"

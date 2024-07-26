@@ -26,7 +26,7 @@ width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 
 
 # Check if the correct number of arguments is provided
-if [ "$#" == 1 ] && [ $1 =="plot" ]; then
+if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
 else 
    if [ -d "${model}_output" ]; then
