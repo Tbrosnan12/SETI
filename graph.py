@@ -30,14 +30,14 @@ DM_int = (DM_end - DM_start) / DM_step + 1
 width_int = (width_end - width_start) / width_step + 1
 
 # Parameters for amont of boxs to skip for ticks
-N1 = 2
+N1 = 5
 N2 = 5
 
 # Calculate the percentage ratio of Reported to Injected values
 array = 100 * np.divide(Reported, Injected)
 
 
-norm = cm.colors.Normalize(vmax=100, vmin=0)
+norm = cm.colors.Normalize(vmax=105, vmin=70)
 plt.figure(figsize=(6, 6))
 plt.imshow(array, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
 plt.xticks(np.arange(0, width_int, N1), np.arange(width_start, width_end + 0.5 * width_step, width_step * N1), fontsize=15)
