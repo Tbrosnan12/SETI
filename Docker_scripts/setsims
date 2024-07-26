@@ -4,9 +4,13 @@ cd sims
 
 git clone https://github.com/hqiu-nju/simfred
 git clone https://github.com/hqiu-nju/CRAFT-ICS-pipeline
+cd ..
+cd ..
+git clone git clone https://github.com/evanocathain/destroy_gutted
+cd Docker_scripts
 pip install git+https://github.com/telegraphic/sigpyproc
 
-cd ..
+
 # Line to add to .bashrc
 dir=$(pwd)
 line_to_add="export PYTHONPATH=\"${dir}/sims/simfred:\$PYTHONPATH\""
