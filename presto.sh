@@ -58,7 +58,8 @@ else
 
 
       candfile="test_single_dm${DM}_width${width}.singlepulse"
-      
+      echo $(pwd)
+      echo "$candfile"
       if [ -z "$candfile" ]; then
           echo "candfile=$candfile"
           echo "no result pulse for ${file}"
@@ -78,11 +79,8 @@ else
               max = $2
               }
 
-              # Stop processing after the second row
-              NR > 2 { exit }
-
               END { print max }  
-              ' "$filename")    
+              ' "$candfile")    
       fi
       
       if [ -z "$SNR" ]; then
@@ -91,13 +89,12 @@ else
          matrix[$width_index,$dm_index]=$SNR
       fi
       cd ..
-      cd ..
    done
 
    dm_range=$(python3 -c "print(int(($DM_end - $DM_start) / $DM_step))")
    width_range=$(python3 -c "print(int(($width_end - $width_start) / $width_step))")
-   echo "dm_range=$dm_range"
-   echo "width_range=$width_range"
+   #echo "dm_range=$dm_range"
+   #echo "width_range=$width_range"
    for i in $(seq 0 1 $dm_range); do
       row=""
       for j in $(seq 0 1 $width_range); do
