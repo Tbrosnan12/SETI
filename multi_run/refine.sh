@@ -74,4 +74,4 @@ else
       echo "$row" >> "out.txt"
   done
 fi
-python graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step presto
+python3 graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step presto

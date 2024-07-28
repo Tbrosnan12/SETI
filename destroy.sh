@@ -81,4 +81,4 @@ else
    done
 fi
 
-python ../graph.py injected_snr.txt destroy_output/destroy.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step destroy
+python3 ../graph.py injected_snr.txt destroy_output/destroy.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step destroy
