@@ -18,6 +18,12 @@ fi
 start=$1
 end=$2
 
-for i in $(seq  $start 1 $end); do
-   csh schedtool.csh $i &
+for i in $(seq $start 1 $end); do
+    csh schedtool.csh $i &
 done
+
+# Wait for all background jobs to complete
+wait
+
+# Run the refine.sh script
+bash refine.sh
