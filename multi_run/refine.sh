@@ -8,7 +8,7 @@ else
 
   if [ -f "out.txt" ]; then
     rm out.txt
-    echo "removed out.txt"
+    echo "removed previous out.txt"
   fi
   touch out.txt
   declare -A matrix
