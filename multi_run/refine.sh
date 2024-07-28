@@ -1,6 +1,6 @@
 #!/bin/bash
 
-model=presto
+model=transientx
 
 if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
