@@ -26,7 +26,7 @@ cd output_files
 touch injected_snr.txt
 
 # Create the pulses
-python3 ../simscript_thomas.py  --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
+python3 ../python/simscript_thomas.py  --dm_start ${DM_start} --dm ${DM_end} --step ${DM_step} --sig_start ${width_start} --sig_step ${width_step} --sig ${width_end} -N 1 -A $amp -s 5000
 if [ $? -ne 0 ]; then
    echo "Error: Failed to run simscript_thomas.py"
    exit 1
@@ -36,10 +36,10 @@ echo "Inverting filterbanks"
 for width1 in $(seq $width_start $width_step $width_end); do
 	for DM1 in $(seq $DM_start $DM_step $DM_end); do
 
-      width=$(python3 ../custom_round.py $width1 2)
-      DM=$(python3 ../custom_round.py $DM1 0)
+      width=$(python3 ../python/custom_round.py $width1 2)
+      DM=$(python3 ../python/custom_round.py $DM1 0)
  
-      python3 ../invert.py test_single_dm${DM}_width${width}.fil | grep "nothing"
+      python3 ../python/invert.py test_single_dm${DM}_width${width}.fil | grep "nothing"
       rm test_single_dm${DM}_width${width}.fil
    done
 done 
