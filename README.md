@@ -1,3 +1,10 @@
+#Single pulse test 
+Single pulse test is a pipeline for testing the efficancy of single pulse detection algorithms. 
+The pipeline injects synthetic guassian pulses 
+
+
+
+
 dependacies: 
 
 dynspec (https://github.com/hqiu-nju/simfred)
