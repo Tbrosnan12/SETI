@@ -1,9 +1,10 @@
 #!/bin/bash
 
-model=presto
+model=$1
 
 if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
+    $model=presto
 else 
 
   if [ -f "out.txt" ]; then
@@ -74,4 +75,4 @@ else
       echo "$row" >> "out.txt"
   done
 fi
-python3 graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step presto
+python3 graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step $model

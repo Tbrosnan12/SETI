@@ -1,29 +1,29 @@
 #!/bin/bash
 
+model=presto
+
+DM_start=0
+DM_end=2500                 #change these values to your liking before runing this script by: bash multi_core.sh
+DM_step=100
+width_start=1
+width_end=25
+width_step=1
+
+cpu_core_start=0
+cpu_core_end=32
+
+
 if [ -d "iter0" ]; then
   rm -r iter*
   echo "removing previous data"
 fi
 
-usage() {
-    echo "Usage: $0  <start cpu No.> <end cpu No.>"
-    exit 1
-}
 
-if [ "$#" -lt 2 ]; then
-    echo "Error: Invalid number of arguments."
-    usage
-fi
-
-start=$1
-end=$2
-
-for i in $(seq $start 1 $end); do
-    csh schedtool.csh $i &
+for i in $(seq $cpu_core_start 1 $cpu_core_end); do
+    csh schedtool.csh $DM_start $DM_end $DM_step $width_start $width_end $width_step $i $model &
 done
 
 # Wait for all background jobs to complete
 wait
 
-# Run the refine.sh script
-bash refine.sh
+bash refine.sh $model
