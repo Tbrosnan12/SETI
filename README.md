@@ -25,7 +25,7 @@ bash presto.sh
 ```
 This can be done in the main folder you do not need to enter ```output_files```. The output image of the plot generated is named ```model.png```, based on whatever model you used to search and is stored in ```output_files```. 
 
-Once data is generated the specifics of the plot can be changed in ```graph.py``` and the data replotted by running ```model.sh plot``` for any of the models. 
+Once data is generated the specifics of the plot can be changed in ```graph.py``` and the data replotted by running ```bash model.sh plot``` for any of the models. 
 
 
 Since the filterbanks are injected along with noise, the results of one iteration can vary from the true result. This makes it advantageous to run and average out the test several times. 
