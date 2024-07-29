@@ -5,7 +5,7 @@ The pipeline injects synthetic guassian pulses and records the fraction of S/N r
 
 # Dependencies
 
-The synthetic pulses are createsd useing [dynspec](https://github.com/hqiu-nju/simfred)
+The synthetic pulses are createsd useing [Simfred](https://github.com/hqiu-nju/simfred)
 
 sigpyproc is also needed to invert the filterbanks if not allready installed this can be cloned from [here](https://github.com/telegraphic/sigpyproc) (dont do this if you allready have sigpyproc it can mess things up)
 
