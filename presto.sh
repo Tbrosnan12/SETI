@@ -106,4 +106,4 @@ fi
 
 
 python3 ../graph.py injected_snr.txt ${model}_output/${model}.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
-cat ${model}_output/${model}.txt
+#cat ${model}_output/${model}.txt

@@ -2,7 +2,7 @@
 
 
 set DM_start = $1
-set DM_end = $2            #change these values to your liking before runing this script by: bash multi_core.sh
+set DM_end = $2            
 set DM_step = $3
 set width_start = $4
 set width_end = $5
