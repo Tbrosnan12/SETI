@@ -41,4 +41,5 @@ If you wish to remake the plot you can change the specifics in ```graph_multi.py
 
 # Example output plot
 
-![image](https://github.com/user-attachments/assets/ee0568e2-cc91-418d-921d-9cc6aceee343)
+![image](https://github.com/user-attachments/assets/4adff139-23fa-4863-b3a1-513dd6f381a8)
+

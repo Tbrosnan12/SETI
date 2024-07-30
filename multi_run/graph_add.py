@@ -14,31 +14,38 @@ def read_file(filename):
     return array
 
 # Read the data from the files specified in the command-line arguments
-array1 = read_file(sys.argv[2])
-array2 = read_file(sys.argv[1])
-array1 = np.array(array1)
-array2 = np.array(array2)
+#array1 = read_file(sys.argv[2])
+#array2 = read_file(sys.argv[1])
+#array1 = np.array(array1)
+#array2 = np.array(array2)
 # Read the DM and width range parameters from the command-line arguments
-DM_start =float(sys.argv[3])
-DM_end = float(sys.argv[4])
-DM_step = float(sys.argv[5])
-width_start =float(sys.argv[6])
-width_end = float(sys.argv[7])
-width_step = float(sys.argv[8])
-name = sys.argv[9]
+
+DM_start =float(sys.argv[1])
+DM_end = float(sys.argv[2])
+DM_step = float(sys.argv[3])
+width_start =float(sys.argv[4])
+width_end = float(sys.argv[5])
+width_step = float(sys.argv[6])
+name = sys.argv[7]
 # Calculate the number of intervals for DM and width
 DM_int = (DM_end - DM_start) / DM_step + 1
 width_int = (width_end - width_start) / width_step + 1
 
+#print(len(sys.argv))
 # Parameters for amont of boxs to skip for ticks
-N1 = 2
+N1 = 4
 N2 = 5
 
+array=0
+for i in np.arange(8,len(sys.argv),1):
+    array += np.array(read_file(sys.argv[i]))
+array=array*100/(len(sys.argv)-8)
+
 # Calculate the percentage ratio of Reported to Injected values
-array = 100 * (array1 + array2) / 2
+#array = 100 * (array1 + array2) / 2
 
 
-norm = cm.colors.Normalize(vmax=100, vmin=np.min(array))
+norm = cm.colors.Normalize(vmax=100, vmin=50)
 plt.figure(figsize=(6, 6))
 plt.imshow(array, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
 plt.xticks(np.arange(0, width_int, N1), np.arange(width_start, width_end + 0.5 * width_step, width_step * N1), fontsize=15)
@@ -51,4 +58,4 @@ plt.xlabel("$\sigma_{intrinsic}$ (ms)", fontsize=15)
 plt.ylabel("DM (pc cm$^{-3}$)", fontsize=15)
 cbar.set_label("S/N Reported/Injected (%)", fontsize=15)
 plt.tight_layout()
-plt.savefig(f"{name}.png")  
+plt.savefig(f"{name}.png")
