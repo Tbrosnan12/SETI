@@ -1,6 +1,7 @@
 #!/bin/bash
 
 model=$1
+count=0
 
 if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
@@ -19,7 +20,8 @@ else
 
   for dir in iter*; do
 
-    echo -ne "refining iteration $dir / $n\r"
+    echo -ne "refining iteration $count / $n\r"
+    count=count+1
 
     cd $dir
     cd output_files
@@ -28,7 +30,7 @@ else
     mv ranges.txt ../
     cd ..
     rm -r output_files
-    rm *py && rm *sh
+    rm *py && rm *sh && rm -r python
 
     DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)
     DM_end=$(awk 'NR == 2 { print $1 }' ranges.txt)

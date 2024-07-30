@@ -35,8 +35,10 @@ else
    fi
 
    declare -A matrix
+   declare -A boxcar_matrix
    mkdir ${model}_output 
    touch ${model}_output/${model}.txt
+   touch ${model}_output/boxcar.txt
   
    for file in *.fil; do
       cd ${model}_output/   
@@ -80,13 +82,42 @@ else
               }
 
               END { print max }  
-              ' "$candfile")    
+              ' "$candfile")
+
+         boxcar=$(awk '
+               # Skip lines starting with a comment character (#)
+               $1 ~ /^#/ { next }
+               # Store the maximum value of the second column
+               NR == 2 {
+               max = $2
+               maxb=$5
+               next
+               }
+
+               # Compare subsequent values in the second column to find the maximum
+               NR > 2 && $2 > max {
+               max = $2
+               maxb=$5
+               }
+
+               END { print maxb }
+               ' "$candfile")
+            
+	        
       fi
       
       if [ -z "$SNR" ]; then
          matrix[$width_index,$dm_index]=0
       else
          matrix[$width_index,$dm_index]=$SNR
+      fi
+
+      if [ -z "$boxcar" ]; then
+         #echo "$dm_index,$width_index,$sigma"
+         boxcar_matrix[$width_index,$dm_index]=0
+      else
+         #echo "$dm_index,$width_index,$sigma"
+         boxcar_matrix[$width_index,$dm_index]=$boxcar
       fi
       cd ..
    done
@@ -97,13 +128,17 @@ else
    #echo "width_range=$width_range"
    for i in $(seq 0 1 $dm_range); do
       row=""
+      row2=""
       for j in $(seq 0 1 $width_range); do
          row+=" ${matrix[$j,$i]}"
+         row2+=" ${boxcar_matrix[$j,$i]}"
       done
       echo "$row" >> "${model}_output/${model}.txt"
+      echo "$row2" >> "${model}_output/boxcar.txt"
    done
 fi
 
 
 python3 ../graph.py injected_snr.txt ${model}_output/${model}.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
+python3 ../python/boxcar.py boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
 cat ${model}_output/${model}.txt
