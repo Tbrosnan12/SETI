@@ -1,7 +1,6 @@
 #!/bin/bash
 
 model=$1
-count=0
 
 if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
@@ -21,11 +20,14 @@ else
   for dir in iter*; do
 
     echo -ne "refining iteration $count / $n\r"
-    count=count+1
+    count=$(($count+1))
 
     cd $dir
     cd output_files
     mv injected_snr.txt ../
+    if [ -f "boxcar.png" ]; then
+       mv boxcar.png ../
+    fi
     mv ${model}_output/${model}.txt ../
     mv ranges.txt ../
     cd ..
