@@ -37,8 +37,9 @@ else
    touch destroy_output/destroy.txt
 
    for file in *.fil; do
-      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
-      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
+      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+(\.[0-9]+)?')
+      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+(\.[0-9]+)?')
+
       dedisperse ${file} -d ${DM} > destroy_output/test_single_dm${DM}_width${width}.fil.tim          # dedisperse 
 
       echo "searching $file"

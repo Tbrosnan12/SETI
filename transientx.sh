@@ -40,8 +40,9 @@ else
 
    for file in *.fil; do
 
-      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
-      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
+      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+(\.[0-9]+)?')
+      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+(\.[0-9]+)?')
+
 
       mkdir "${model}_output/${file}.${model}"  
       cd ${model}_output/${file}.${model}                                        #dedispersing and searching 

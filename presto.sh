@@ -42,8 +42,9 @@ else
   
    for file in *.fil; do
       cd ${model}_output/   
-      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
-      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
+      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+(\.[0-9]+)?')
+      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+(\.[0-9]+)?')
+
  
                                             #dedispersing 
       prepdata -nobary -noclip -dm ${DM} -o test_single_dm${DM}_width${width} -filterbank ../test_single_dm${DM}_width${width}_inverted.fil | grep "Writing"

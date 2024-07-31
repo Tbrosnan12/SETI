@@ -43,8 +43,9 @@ else
 
       echo "searching $file"
 
-      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+')
-      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+')
+      DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+(\.[0-9]+)?')
+      width=$(echo "$file" | grep -oP '(?<=width)[0-9]+(\.[0-9]+)?')
+
 
       dm_index=$(python3 -c "print(int(($DM - $DM_start) / $DM_step))")
       width_index=$(python3 -c "print(int(($width - $width_start) / $width_step))")
