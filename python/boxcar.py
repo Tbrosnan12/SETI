@@ -34,7 +34,7 @@ N2 = 5
 
 
 
-norm = cm.colors.Normalize(vmax=30, vmin=0)
+norm = cm.colors.Normalize(vmax=70, vmin=0)
 plt.figure(figsize=(6, 6))
 plt.imshow(boxcars, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
 plt.xticks(np.arange(0, width_int, N1), np.arange(width_start, width_end + 0.5 * width_step, width_step * N1), fontsize=15)
