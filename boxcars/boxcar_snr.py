@@ -13,9 +13,10 @@ def read_file(filename):
             array.append(row)
     return array
 
-snr=np.array(read_file(sys.argv[1]))
+snr=np.array(read_file(sys.argv[1])) / np.array(read_file(sys.argv[2]))
 xaxis=np.zeros(round(len(snr)))
 for i in range(round(len(snr))):
     xaxis[i]=i
 
 plt.plot(xaxis,snr)
+plt.savefig(f"boxcar_snr.png")

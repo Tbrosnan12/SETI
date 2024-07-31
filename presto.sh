@@ -55,10 +55,9 @@ else
       single_pulse_search.py -m 70 -b test_single_dm${DM}_width${width}.dat | grep "Found"
 
 
-      dm_index=$(python3 -c "print(int(($DM - $DM_start) / $DM_step))")
-      width_index=$(python3 -c "print(int(($width - $width_start) / $width_step))")
+      dm_index=$(python3 -c "print(round(($DM - $DM_start) / $DM_step))")
+      width_index=$(python3 -c "print(round(($width - $width_start) / $width_step))")
       
-
 
       candfile="test_single_dm${DM}_width${width}.singlepulse"
       #echo $(pwd)

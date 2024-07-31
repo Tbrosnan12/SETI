@@ -47,10 +47,10 @@ else
       width=$(echo "$file" | grep -oP '(?<=width)[0-9]+(\.[0-9]+)?')
 
 
-      dm_index=$(python3 -c "print(int(($DM - $DM_start) / $DM_step))")
-      width_index=$(python3 -c "print(int(($width - $width_start) / $width_step))")
-      echo "dm_index=$dm_index"
-      echo "width_index=$width_index"
+      dm_index=$(python3 -c "print(round(($DM - $DM_start) / $DM_step))")
+      width_index=$(python3 -c "print(round(($width - $width_start) / $width_step))")
+      #echo "dm_index=$dm_index"
+      #echo "width_index=$width_index"
 
       candfile=$( ls | head -n 1 )
 
