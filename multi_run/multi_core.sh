@@ -13,10 +13,18 @@ cpu_core_start=0
 cpu_core_end=32
 
 
-if [ -d "iter0" ]; then
-  rm -r iter*
-  echo "removing previous data"
+removed_any=false
+
+for dir in iter*; do
+    rm -r "$dir"
+    removed_any=true
+done
+
+if $removed_any; then
+  echo "Removed previous data"
 fi
+
+
 
 
 for i in $(seq $cpu_core_start 1 $cpu_core_end); do
@@ -26,4 +34,4 @@ done
 # Wait for all background jobs to complete
 wait
 
-bash refine.sh $model
+bash refine-2.sh $model

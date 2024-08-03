@@ -15,7 +15,10 @@ cd "iter$val"
 cp ../../*.py .
 cp ../../*.sh .
 cp -r ../../python .
+cp ../ refine* .
     
 schedtool -a $val -e bash create.sh $DM_start $DM_end $DM_step $width_start $width_end $width_step
 schedtool -a $val -e bash ${model}.sh
+schedtool -a $val -e bash refine-1.sh ${model}.sh
+
 cd ..
