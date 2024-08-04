@@ -27,5 +27,6 @@ fi
 . ~/.bashrc
 
 apt-get install bc
+apt install schedtool
 
 
