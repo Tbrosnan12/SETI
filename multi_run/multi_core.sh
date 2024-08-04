@@ -1,6 +1,6 @@
 #!/bin/bash
 
-model=presto
+model=transientx
 
 DM_start=0
 DM_end=2500                 #change these values to your liking before runing this script by: bash multi_core.sh
@@ -13,17 +13,13 @@ cpu_core_start=0
 cpu_core_end=32
 
 
-removed_any=false
 
-for dir in iter*; do
-    rm -r "$dir"
-    removed_any=true
-done
-
-if $removed_any; then
+if ls iter* 1> /dev/null 2>&1; then
+  for dir in iter*; do
+     rm -r "$dir"
+  done
   echo "Removed previous data"
 fi
-
 
 
 

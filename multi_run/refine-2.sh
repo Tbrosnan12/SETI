@@ -1,11 +1,26 @@
 #!/bin/bash
+model=$1
+
+declare -A matrix
+
+n=$(ls -d iter* 2>/dev/null | wc -l)
+first=1
+count=1
+
+if [ -f "out.txt" ]; then
+  rm out.txt
+  echo "removed previous out.txt"
+fi
 
 for dir in iter*; do
+#    echo -ne "refining iteration $count / $n\r"
+    count=$(($count+1))
+
     cd $dir
     DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)
     DM_end=$(awk 'NR == 2 { print $1 }' ranges.txt)
     DM_step=$(awk 'NR == 3 { print $1 }' ranges.txt)
-    width_start=$(awk 'NR == 4 { print $1 }' ranges.tnanxt)
+    width_start=$(awk 'NR == 4 { print $1 }' ranges.txt)
     width_end=$(awk 'NR == 5 { print $1 }' ranges.txt)
     width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 
@@ -37,14 +52,15 @@ for dir in iter*; do
     fi
     cd ..
   done
+echo "dm_range=$dm_range"
+echo "width_range=$width_range"
 
   for i in $(seq 0 1 $dm_range); do
       row=""
-      for j in $(seq 0 1 $width_range); dod
+      for j in $(seq 0 1 $width_range); do
           val=$( echo "${matrix[$j,$i]}/$n" | bc -l)
           row+=" $val"
       done
       echo "$row" >> "out.txt"
   done
-fi
 python3 graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step $model
