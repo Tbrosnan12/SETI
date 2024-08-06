@@ -1,6 +1,4 @@
 #!/bin/csh
-
-
 set DM_start = $1
 set DM_end = $2            
 set DM_step = $3
