@@ -39,7 +39,7 @@ bash multi_core.sh
 ```
 This will generate an averaged plot named ```model.png``` in the ```multi_run``` directory. 
 
-If you wish to remake the plot you can change the specifics in ```graph_multi.py``` and then run ``` bash refine.sh plot ```
+If you wish to remake the plot you can change the specifics in ```graph_multi.py``` and then run ``` bash refine-2.sh plot ```
 
 # Example output plot
 
