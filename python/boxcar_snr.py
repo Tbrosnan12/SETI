@@ -12,9 +12,12 @@ def read_file(filename):
             array.append(row)
     return array
 
+snr=0
+for i in np.arange(1,len(sys.argv),1):
+    snr += np.array(read_file(sys.argv[i]))
+snr=snr*100/(len(sys.argv)-1)
 
 
-snr=np.array(read_file(sys.argv[1]))/ np.array(read_file(sys.argv[2]))
 
 snr = snr.flatten()
 xaxis=np.arange(0,len(snr),1)
@@ -24,5 +27,5 @@ plt.xticks(np.arange(0, len(snr), N1/0.1), np.arange(1, 25 + 0.5 * 1, 1* N1), fo
 plt.plot(xaxis,snr)
 plt.xlabel("width")
 plt.ylabel("Ratio of S/N recovered")
-plt.title("0 DM recovery")
+plt.title("0 DM recovery for Presto")
 plt.savefig(f"boxcar_snr.png")

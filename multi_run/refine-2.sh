@@ -63,4 +63,6 @@ echo "width_range=$width_range"
       done
       echo "$row" >> "out.txt"
   done
+
+  
 python3 graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step $model

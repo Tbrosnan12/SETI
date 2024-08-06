@@ -9,7 +9,7 @@ width_start=1
 width_end=25
 width_step=1
 
-cpu_core_start=0
+cpu_core_start=1
 cpu_core_end=32
 
 

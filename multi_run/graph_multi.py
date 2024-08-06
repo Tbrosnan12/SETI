@@ -30,7 +30,7 @@ DM_int = (DM_end - DM_start) / DM_step + 1
 width_int = (width_end - width_start) / width_step + 1
 
 # Parameters for amont of boxs to skip for ticks
-N1 = 2
+N1 = 4
 N2 = 5
 
 # Calculate the percentage ratio of Reported to Injected values
