@@ -15,9 +15,7 @@ cpu_core_end=32
 
 
 if ls iter* 1> /dev/null 2>&1; then
-  for dir in iter*; do
-     rm -r "$dir"
-  done
+  rm -r iter*
   echo "Removed previous data"
 fi
 

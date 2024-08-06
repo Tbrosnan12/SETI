@@ -55,10 +55,10 @@ else
               done
           done
       fi
-      cd ..
+      cd ..  
     done
-  echo "dm_range=$dm_range"
-  echo "width_range=$width_range"
+  #echo "dm_range=$dm_range"
+  #echo "width_range=$width_range"
 
   for i in $(seq 0 1 $dm_range); do
       row=""

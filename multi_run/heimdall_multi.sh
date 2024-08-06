@@ -13,9 +13,13 @@ width_step=1
 cpu_core_start=1
 cpu_core_end=32
 
+if ls iter* 1> /dev/null 2>&1; then
+  rm -r iter*
+  echo "Removed previous data"
+fi
 
 for val in $( seq $cpu_core_start 1 $cpu_core_end ); do
-    csh heimdall_sched.sh $
+    csh heimdall_sched.sh $DM_start $DM_end $DM_step $width_start $width_end $width_step $val $model &
 done 
 
 wait
