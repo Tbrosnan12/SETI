@@ -1,5 +1,7 @@
 #!/bin/bash
 
+model=heimdall
+
 usage() {
     echo "Usage: $0"
 
@@ -8,7 +10,7 @@ usage() {
     exit 1
 }
 
-if [ -d "output_files" ]; then 
+if [ -d "output_files" ]; then   
    cd output_files
 else 
    echo "Warning: need to generate filterbanks in /output_files first"
@@ -27,24 +29,24 @@ width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 if [ "$#" == 1 ] && [ $1 =="plot" ]; then
     echo "remaking plot"
 else 
-   if [ -d "heimdall_output" ]; then
-       rm -r heimdall_output
-   echo "deleted previous heimdall test data"
+   if [ -d "${model}_output" ]; then
+       rm -r ${model}_output
+   echo "deleted previous ${model} test data"
    fi
 
    declare -A matrix
-   mkdir heimdall_output
-   touch heimdall_output/heimdall.txt
+   mkdir ${model}_output
+   touch ${model}_output/${model}.txt
 
    for file in *.fil; do
-      mkdir "heimdall_output/${file}.cands"                                               #dedispersing and searching 
-      heimdall -f ${file} -dm 0 2500 -dm_tol 1.01 -cand_sep_filter 1 -boxcar_max 32 -baseline_length 20 -output_dir heimdall_output/${file}.cands -rfi_no_broad;
-      cd heimdall_output/${file}.cands
-
-      echo "searching $file"
-
       DM=$(echo "$file" | grep -oP '(?<=dm)[0-9]+(\.[0-9]+)?')
       width=$(echo "$file" | grep -oP '(?<=width)[0-9]+(\.[0-9]+)?')
+
+      mkdir "${model}_output/${file}.cands"                                               #dedispersing and searching 
+      heimdall -f ${file} -dm ${DM} ${DM} -dm_tol 1.01 -cand_sep_filter 1 -boxcar_max 32 -baseline_length 20 -output_dir ${model}_output/${file}.cands -rfi_no_broad;
+      cd ${model}_output/${file}.cands
+
+      echo "searching $file"
 
 
       dm_index=$(python3 -c "print(round(($DM - $DM_start) / $DM_step))")
@@ -73,7 +75,7 @@ else
          ' "$candfile")
          #echo "$SNR"
       fi
-      
+
       if [ -z "$SNR" ]; then
          matrix[$width_index,$dm_index]=0
       else
@@ -90,9 +92,9 @@ else
       for j in $(seq 0 1 $width_range); do
          row+=" ${matrix[$j,$i]}"
       done
-      echo "$row" >> "heimdall_output/heimdall.txtheimdall.txt"
+      echo "$row" >> "${model}_output/${model}.txt"
    done
 fi
 
 
-python3 ../graph.py injected_snr.txt heimdall_output/heimdall.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step heimdall
+python3 ../graph.py injected_snr.txt ${model}_output/${model}.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
