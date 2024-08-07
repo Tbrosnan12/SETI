@@ -39,16 +39,16 @@ Vmax = 100
 Vmin = 50
 
 if len(sys.argv) > 9:
-    Nx = sys.argv[9]
-    Ny = sys.argv[10]
-    Vmin = sys.argv[10]
-    Vmax = sys.argv[11] 
+    Nx = int(sys.argv[9])
+    Ny = int(sys.argv[10])
+    Vmin = int(sys.argv[10])
+    Vmax = int(sys.argv[11]) 
 
 
 
 norm = cm.colors.Normalize(vmax=Vmax, vmin=Vmin)
 
-plt.figure(figsize=(6, 6))
+plt.figure(figsize=(6, 6))  
 plt.imshow(array, aspect='auto', cmap=cm.coolwarm, interpolation='nearest', norm=norm)
 plt.xticks(np.arange(0, width_int, Nx), np.arange(width_start, width_end + 0.5 * width_step, width_step * Nx), fontsize=15)
 plt.yticks(np.arange(0, DM_int, Ny), np.arange(DM_start, DM_end + 0.5 * DM_step, DM_step * Ny), fontsize=15)

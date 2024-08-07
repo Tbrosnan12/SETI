@@ -28,7 +28,8 @@ else
     rm std.txt
     echo "removed previous std.txt"
   fi
-
+  touch out.txt
+  touch std.txt
   for dir in iter*; do
       echo -ne "refining iteration $count / $n\r"
       count=$(($count+1))
@@ -72,7 +73,7 @@ else
       row2=""
       for j in $(seq 0 1 $width_range); do
           mean=$( echo "${matrix[$j,$i]}/$n" | bc -l)
-          standard_deviaton=$( echo "sqrt((${rms_matrix[$j,$i]}/$n)-(${mean}^2))" | bc -l)
+          standard_deviation=$( echo "sqrt((${rms_matrix[$j,$i]}/$n)-(${mean}^2))" | bc -l)
           row+=" $mean"
           row2+=" $standard_deviation"
       done
