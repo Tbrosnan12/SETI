@@ -1,5 +1,6 @@
 #!/bin/bash
 touch out.txt
+touch std.txt
 model=$1
 
 cd output_files
