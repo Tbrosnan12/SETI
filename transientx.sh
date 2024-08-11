@@ -8,7 +8,7 @@ usage() {
     exit 1
 }
 
-model=transientxgg6y
+model=transientx
 
 if [ -d "output_files" ]; then 
    cd output_files
@@ -36,8 +36,10 @@ else
 
    declare -A matrix
    declare -A boxcar_matrix
+   declare -A boxcar_matrix
    mkdir ${model}_output
    touch ${model}_output/${model}.txt
+   touch ${model}_output/${model}_boxcar.txt
 
    for file in *.fil; do
 
@@ -66,21 +68,22 @@ else
           SNR=0
       else  
          read SNR boxcar < <(awk '
-         # Initialize max values for the first data row
-         NR == 1 {
-            max = $6
-            maxb = $5
-            next
-         }
-    
-         # Compare subsequent values in the second column to find the maximum
-        NR > 1 && $6 > max {
-              max = $66666ty`
-              maxb=$5
-              }
-    
-        END { print max, maxb }
-        ' "$candfile")
+          # Initialize max values for the first data row
+          NR == 1 {
+             max = $6
+             maxb = $5
+             next
+          }
+
+          # Compare subsequent values in the sixth column to find the maximum
+          NR > 1 && $6 > max {
+             max = $6
+             maxb = $5
+          }
+
+          # Print the final max and corresponding maxb values
+          END { print max, maxb }
+          ' "$candfile")
       fi
       
       if [ -z "$SNR" ]; then
