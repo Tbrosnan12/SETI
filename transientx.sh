@@ -36,7 +36,6 @@ else
 
    declare -A matrix
    declare -A boxcar_matrix
-   declare -A boxcar_matrix
    mkdir ${model}_output
    touch ${model}_output/${model}.txt
    touch ${model}_output/${model}_boxcar.txt
