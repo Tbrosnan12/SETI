@@ -31,7 +31,7 @@ Once data is generated the specifics of the plot can be changed in ```graph.py``
 
 
 Since the filterbanks are injected along with noise, the results of one iteration can vary from the true result. This makes it advantageous to run and average out the test several times. 
-For this purpose there are scripts in the ``` multi_run ``` directory to automate this process using [schedtool](https://man.archlinux.org/man/schedtool.8.en) (apt install schedtool), running on multible cpu cores at once. 
+For this purpose there are scripts in the ``` multi_run ``` directory to automate this process using [schedtool](https://man.archlinux.org/man/schedtool.8.en) (apt install schedtool), running on multible cpu cores at once (Note this will not work for algorithms that are GPU based like Heimdall!). 
 
 First ```cd muilti_run```, then change the values of the parameters at the top of ```multi_core.sh``` to your liking. This includes the range of DM's and widths you want to search over, the cpu cores you want to use aswell as the model you want to search with. Then just run the script (in the ```multi_run``` directory) to start:
 ```
@@ -39,7 +39,7 @@ bash multi_core.sh
 ```
 This will generate an averaged plot named ```model.png``` in the ```multi_run``` directory. 
 
-If you wish to remake the plot you can change the specifics in ```graph_multi.py``` and then run ``` bash refine.sh plot ```
+If you wish to remake the plot you can change the specifics in ```graph_multi.py``` and then run ``` bash refine-2.sh plot ```
 
 # Example output plot
 
