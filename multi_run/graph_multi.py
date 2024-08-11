@@ -41,8 +41,8 @@ Vmin = 50
 if len(sys.argv) > 9:
     Nx = int(sys.argv[9])
     Ny = int(sys.argv[10])
-    Vmin = int(sys.argv[10])
-    Vmax = int(sys.argv[11]) 
+    Vmin = int(sys.argv[11])
+    Vmax = int(sys.argv[12]) 
 
 
 

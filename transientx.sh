@@ -35,8 +35,10 @@ else
    fi
 
    declare -A matrix
+   declare -A boxcar_matrix
    mkdir ${model}_output
    touch ${model}_output/${model}.txt
+   touch ${model}_output/${model}_boxcar.txt
 
    for file in *.fil; do
 
@@ -64,18 +66,23 @@ else
           echo "no result pulse for ${file}"
           SNR=0
       else  
-          SNR=$(awk '
-          # Store the maximum value of the sixth column
-          NR == 1 {
-          max = $6
-          next
-          }
-
-          NR > 1 && $6 > max {
-          max = $6
-          }
-          END { print max }
-          ' "$candfile")      
+          read SNR boxcar < <(awk '
+    
+               # Initialize max values for the first data row
+               NR == 6 {
+                  max = $6
+                  maxb = $5
+                  next
+               }
+    
+               # Compare subsequent values in the second column to find the maximum
+               NR > 6 && $6 > max {
+                  max = $6
+                  maxb = $5
+               }
+    
+               END { print max, maxb }
+               ' "$candfile")     
       fi
       
       if [ -z "$SNR" ]; then
@@ -83,23 +90,31 @@ else
       else
          matrix[$width_index,$dm_index]=$SNR
       fi
+       if [ -z "$boxcar" ]; then
+         boxcar_matrix[$width_index,$dm_index]=0
+      else
+         boxcar_matrix[$width_index,$dm_index]=$boxcar
+      fi
       cd ..
       cd ..
    done
 
-   dm_range=$(python3 -c "print(int(($DM_end - $DM_start) / $DM_step))")
-   width_range=$(python3 -c "print(int(($width_end - $width_start) / $width_step))")
+   dm_range=$(python3 -c "print(round(($DM_end - $DM_start) / $DM_step))")
+   width_range=$(python3 -c "print(round(($width_end - $width_start) / $width_step))")
    #echo "dm_range=$dm_range"
    #echo "width_range=$width_range"
    for i in $(seq 0 1 $dm_range); do
       row=""
+      row2=""
       for j in $(seq 0 1 $width_range); do
          row+=" ${matrix[$j,$i]}"
+         row2+=" ${boxcar_matrix[$j,$i]}"
       done
       echo "$row" >> "${model}_output/${model}.txt"
+      echo "$row" >> "${model}_output/${model}_boxcar.txt"
    done
 fi
 
 
 python3 ../graph.py injected_snr.txt ${model}_output/${model}.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
-cat ${model}_output/${model}.txt
+python3 ../python/boxcar.py ${model}_output/${model}_boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
