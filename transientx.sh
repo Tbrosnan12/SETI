@@ -48,7 +48,7 @@ else
 
       mkdir "${model}_output/${file}.${model}"  
       cd ${model}_output/${file}.${model}                                        #dedispersing and searching 
-      transientx_fil -v -f ../../${file} --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage --maxw 0.07 --iqr
+      transientx_fil -v -f ../../${file} --dms ${DM} --ddm 0 --ndm 1 --thre 7 --saveimage --maxw 0.07 --iqr | grep "nothing"
 
 
       echo "searching $file"
@@ -56,33 +56,33 @@ else
 
       dm_index=$(python3 -c "print(round(($DM - $DM_start) / $DM_step))")
       width_index=$(python3 -c "print(round(($width - $width_start) / $width_step))")
-      echo "dm_index=$dm_index"
-      echo "width_index=$width_index"
+      #echo "dm_index=$dm_index"
+      #echo "width_index=$width_index"
 
       candfile=$(ls *.cands 2>/dev/null | head -n 1)
       
       if [ -z "$candfile" ]; then
-          echo "candfile=$candfile"
+          #echo "candfile=$candfile"
           echo "no result pulse for ${file}"
           SNR=0
       else  
-          read SNR boxcar < <(awk '
-    
-               # Initialize max values for the first data row
-               NR == 6 {
-                  max = $6
-                  maxb = $5
-                  next
-               }
-    
-               # Compare subsequent values in the second column to find the maximum
-               NR > 6 && $6 > max {
-                  max = $6
-                  maxb = $5
-               }
-    
-               END { print max, maxb }
-               ' "$candfile")     
+         read SNR boxcar < <(awk '
+          # Initialize max values for the first data row
+          NR == 1 {
+             max = $6
+             maxb = $5
+             next
+          }
+
+          # Compare subsequent values in the sixth column to find the maximum
+          NR > 1 && $6 > max {
+             max = $6
+             maxb = $5
+          }
+
+          # Print the final max and corresponding maxb values
+          END { print max, maxb }
+          ' "$candfile")
       fi
       
       if [ -z "$SNR" ]; then
@@ -90,7 +90,7 @@ else
       else
          matrix[$width_index,$dm_index]=$SNR
       fi
-       if [ -z "$boxcar" ]; then
+      if [ -z "$boxcar" ]; then
          boxcar_matrix[$width_index,$dm_index]=0
       else
          boxcar_matrix[$width_index,$dm_index]=$boxcar
@@ -99,8 +99,8 @@ else
       cd ..
    done
 
-   dm_range=$(python3 -c "print(round(($DM_end - $DM_start) / $DM_step))")
-   width_range=$(python3 -c "print(round(($width_end - $width_start) / $width_step))")
+   dm_range=$(python3 -c "print(int(($DM_end - $DM_start) / $DM_step))")
+   width_range=$(python3 -c "print(int(($width_end - $width_start) / $width_step))")
    #echo "dm_range=$dm_range"
    #echo "width_range=$width_range"
    for i in $(seq 0 1 $dm_range); do
@@ -111,10 +111,10 @@ else
          row2+=" ${boxcar_matrix[$j,$i]}"
       done
       echo "$row" >> "${model}_output/${model}.txt"
-      echo "$row" >> "${model}_output/${model}_boxcar.txt"
+      echo "$row2" >> "${model}_output/boxcar.txt"
    done
 fi
 
 
 python3 ../graph.py injected_snr.txt ${model}_output/${model}.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
-python3 ../python/boxcar.py ${model}_output/${model}_boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step ${model}
+python3 ../python/boxcar.py ${model}_output/boxcar.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step
