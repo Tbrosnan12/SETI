@@ -1,5 +1,7 @@
 #!/bin/bash/
 
+target=$1
+
 for dir in iter*; do
-  mv $dir multi_run/$dir
+  mv $dir $target/$dir
 done  
