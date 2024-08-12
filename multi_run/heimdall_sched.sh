@@ -5,7 +5,7 @@ set DM_step = $3
 set width_start = $4
 set width_end = $5
 set width_step = $6
-set val = $7
+set val = $7``
 set model = $8
 
 mkdir "iter$val"

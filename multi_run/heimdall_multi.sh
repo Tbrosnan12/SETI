@@ -13,10 +13,10 @@ width_step=1
 cpu_core_start=1
 cpu_core_end=32 
 
-    if ls iter* 1> /dev/null 2>&1; then
+if ls iter* 1> /dev/null 2>&1; then
     rm -r iter*
     echo "Removed previous data"
-    fi
+fi
 
 for val in $( seq $cpu_core_start 1 $cpu_core_end ); do
     csh heimdall_sched.sh $DM_start $DM_end $DM_step $width_start $width_end $width_step $val $model &
@@ -29,11 +29,11 @@ for iter in iter*; do
     bash ../../heimdall.sh 
     
     cd output_files
-    mv injected_snr.txt ../
+    cp injected_snr.txt ../
     if [ -f "boxcar.png" ]; then
-        mv boxcar.png ../
+        cp boxcar.png ../
     fi
-    mv ${model}_output/${model}.txt ../
+    cp ${model}_output/${model}.txt ../
     cd ..
     rm -r output_files
     rm *py && rm *sh && rm -r python
