@@ -37,7 +37,7 @@ else
     DM_start=$(awk 'NR == 1 { print $1 }' ranges.txt)
     DM_end=$(awk 'NR == 2 { print $1 }' ranges.txt)
     DM_step=$(awk 'NR == 3 { print $1 }' ranges.txt)
-    width_start=$(awk 'NR == 4 { print $1 }' ranges.tnanxt)
+    width_start=$(awk 'NR == 4 { print $1 }' ranges.txt)
     width_end=$(awk 'NR == 5 { print $1 }' ranges.txt)
     width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 
