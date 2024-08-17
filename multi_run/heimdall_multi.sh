@@ -26,9 +26,9 @@ done
 
 wait
 
-for iter in iter*; do 
+for iter in $( seq iter${cpu_core_start} 1 iter${cpu_core_end} ); do 
     cd $iter
-    bash ../../heimdall.sh 
+    bash heimdall.sh | grep nothing
     
     cd output_files
     cp injected_snr.txt ../
