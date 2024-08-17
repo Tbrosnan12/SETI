@@ -1,16 +1,16 @@
 #!/bin/bash
 
-model=$(grep "model=" heimdall_multi.sh | awk -F '=' '{print $2}')
-DM_start=$(grep "DM_start=" heimdall_multi.sh | awk -F '=' '{print $2}')
-DM_end=$(grep "DM_end=" heimdall_multi.sh | awk -F '=' '{print $2}')
-DM_step=$(grep "DM_step=" heimdall_multi.sh | awk -F '=' '{print $2}')
-width_start=$(grep "width_start=" heimdall_multi.sh | awk -F '=' '{print $2}')
-width_end=$(grep "width_end=" heimdall_multi.sh | awk -F '=' '{print $2}')
-width_step=$(grep "width_step=" heimdall_multi.sh | awk -F '=' '{print $2}')
+model=$(grep "model=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
+DM_start=$(grep "DM_start=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
+DM_end=$(grep "DM_end=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
+DM_step=$(grep "DM_step=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
+width_start=$(grep "width_start=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
+width_end=$(grep "width_end=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
+width_step=$(grep "width_step=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
 
 if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
-    model=$(grep "model=" heimdall_multi.sh | awk -F '=' '{print $2}')
+    model=$(grep "model=" heimdall/heimdall_multi.sh | awk -F '=' '{print $2}')
 else
 
   declare -A matrix
