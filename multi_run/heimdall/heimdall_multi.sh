@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd ..
 model=heimdall
 
 #change these values to your liking before runing this script by: bash multi_core.sh
@@ -20,7 +20,7 @@ if ls iter* 1> /dev/null 2>&1; then
 fi
 
 for val in $( seq $cpu_core_start 1 $cpu_core_end ); do
-    csh heimdall_sched.sh $DM_start $DM_end $DM_step $width_start $width_end $width_step $val $model &
+    csh heimdall/heimdall_sched.sh $DM_start $DM_end $DM_step $width_start $width_end $width_step $val $model &
 done 
 
 wait
@@ -43,4 +43,4 @@ done
 
 wait 
 
-bash refine-2.sh $model
+bash heimdall/refine_heimdall.sh $model

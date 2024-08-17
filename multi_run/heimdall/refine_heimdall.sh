@@ -1,16 +1,16 @@
 #!/bin/bash
 
-model=$(grep "model=" multi_core.sh | awk -F '=' '{print $2}')
-DM_start=$(grep "DM_start=" multi_core.sh | awk -F '=' '{print $2}')
-DM_end=$(grep "DM_end=" multi_core.sh | awk -F '=' '{print $2}')
-DM_step=$(grep "DM_step=" multi_core.sh | awk -F '=' '{print $2}')
-width_start=$(grep "width_start=" multi_core.sh | awk -F '=' '{print $2}')
-width_end=$(grep "width_end=" multi_core.sh | awk -F '=' '{print $2}')
-width_step=$(grep "width_step=" multi_core.sh | awk -F '=' '{print $2}')
+model=$(grep "model=" heimdall_multi.sh | awk -F '=' '{print $2}')
+DM_start=$(grep "DM_start=" heimdall_multi.sh | awk -F '=' '{print $2}')
+DM_end=$(grep "DM_end=" heimdall_multi.sh | awk -F '=' '{print $2}')
+DM_step=$(grep "DM_step=" heimdall_multi.sh | awk -F '=' '{print $2}')
+width_start=$(grep "width_start=" heimdall_multi.sh | awk -F '=' '{print $2}')
+width_end=$(grep "width_end=" heimdall_multi.sh | awk -F '=' '{print $2}')
+width_step=$(grep "width_step=" heimdall_multi.sh | awk -F '=' '{print $2}')
 
 if [ "$#" == 1 ] && [ $1 == "plot" ]; then
     echo "remaking plot"
-    model=$(grep "model=" multi_core.sh | awk -F '=' '{print $2}')
+    model=$(grep "model=" heimdall_multi.sh | awk -F '=' '{print $2}')
 else
 
   declare -A matrix
