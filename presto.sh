@@ -52,7 +52,7 @@ else
      
       echo "searching $file"
 
-      single_pulse_search.py -m 70 -b test_single_dm${DM}_width${width}.dat | grep "Found"
+      single_pulse_search.py --maxwidth 70 --nobadblocks --detrenlen 8 test_single_dm${DM}_width${width}.dat | grep "Found"
 
 
       dm_index=$(python3 -c "print(round(($DM - $DM_start) / $DM_step))")
