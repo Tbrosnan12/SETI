@@ -1,12 +1,11 @@
 #!/bin/bash
-N=$1
 
 model=heimdall
 
 #change these values to your liking before runing this script by: bash multi_core.sh
 
 DM_start=0
-DM_end=2500                
+DM_end=2500
 DM_step=100
 width_start=1
 width_end=25
