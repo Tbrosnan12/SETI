@@ -5,7 +5,7 @@ The pipeline injects synthetic guassian pulses and records the fraction of S/N r
 
 # Dependencies
 
-The synthetic pulses are createsd useing [Simfred](https://github.com/hqiu-nju/simfred)
+The synthetic pulses are createsd using [Simfred](https://github.com/hqiu-nju/simfred)
 
 Some scripts need bash calculator ```apt install bc```
 
