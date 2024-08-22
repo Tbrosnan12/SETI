@@ -3,7 +3,7 @@ mkdir sims
 cd sims
 
 git clone https://github.com/hqiu-nju/simfred
-git clone https://github.com/hqiu-nju/CRAFT-ICS-pipeline
+#git clone https://github.com/hqiu-nju/CRAFT-ICS-pipeline
 cd ..
 cd ..
 git clone git clone https://github.com/evanocathain/destroy_gutted
