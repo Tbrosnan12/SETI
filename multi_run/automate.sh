@@ -22,4 +22,4 @@ width_end=$(awk 'NR == 5 { print $1 }' ranges.txt)
 width_step=$(awk 'NR == 6 { print $1 }' ranges.txt)
 cd ..
 
-python3 graph_add.py $DM_start $DM_end $DM_step $width_start $width_end $width_step $model ${out_files}
+python3 ../python/graph_add.py $DM_start $DM_end $DM_step $width_start $width_end $width_step $model ${out_files}
