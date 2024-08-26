@@ -82,4 +82,4 @@ else
   done
 fi
 python3 graph_multi.py out.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step $model
-python3 graph_multi.py std.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step $model 4 5 0 5 
+python3 graph_multi.py std.txt $DM_start $DM_end $DM_step $width_start $width_end $width_step $model_std 4 5 0 5 
